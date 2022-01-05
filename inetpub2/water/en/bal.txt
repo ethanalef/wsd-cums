@@ -1,0 +1,127 @@
+           if cPeriod < mPeriod then
+              select case rs("code")
+                     case "A1","A2","A3","E1","E2","E3","F1","F2","F3"
+                          lttlamt = lttlamt + rs("amount")
+                     case "G3","H3"
+                          lttlamt = lttlamt - rs("amount")
+              end select                                               
+
+           else
+           select case rs("code")
+                  case "E1"
+                       pamt1 = pamt1+rs("amount")
+                  case "E2"
+                       pamt2 = pamt2+rs("amount")
+                  case "E3"
+  		       pamt3 = pamt3+rs("amount") 	
+                  case "F1"
+			iamt1 = iamt1+rs("amount")
+                  case "F2"
+			iamt2 = iamt2+rs("amount")
+                  case "F3"
+			iamt3 = iamt3+rs("amount")
+
+                  case "A3"
+			samt3 = samt3+rs("amount")
+                  case "A2"
+			samt2 = samt2+rs("amount")
+                  case "A1"
+			samt1 = samt1+rs("amount")
+                  case "B0"
+                       Bamt1 = Bamt1+rs("amount")
+                  case "C0"
+                       camt1 = camt1+rs("amount")
+            end select
+            end if
+
+	objFile.Write left("  股金"&spaces,10)
+	objFile.Write right(spaces&formatnumber(samt1,2),1)
+	objFile.Write right(spaces&formatnumber(samt2,2),1)
+	objFile.Write right(spaces&formatnumber(samt3,2),1)
+	objFile.WriteLine ""
+	objFile.Write left("  退股"&spaces,10)
+	objFile.Write right(spaces&formatnumber(Bamt1,2),1)
+	objFile.WriteLine ""
+
+	objFile.Write left("  還款"&spaces,10)
+	objFile.Write right(spaces&formatnumber(pamt1,2),1)
+	objFile.Write right(spaces&formatnumber(pamt2,2),1)
+	objFile.Write right(spaces&formatnumber(pamt3,2),1)
+	objFile.WriteLine ""
+	objFile.Write left("  利皂"&spaces,10)
+	objFile.Write right(spaces&formatnumber(iamt1,2),1)
+	objFile.Write right(spaces&formatnumber(iamt2,2),1)
+	objFile.Write right(spaces&formatnumber(iamt3,2),1)
+	objFile.WriteLine ""	
+
+         set rs = conn.execute(" select *,year(sdate) as Expr1 ,month(sdate) as Expr2  from share order by Expr1,Expr2  ")
+        do while not rs.eof
+           cPeriod = year(rs("sdate"))&right("0"&month(rs("sdate")),2)
+           if (cPeriod - mPeriod) = 0 then
+              select case rs("code")
+                    
+                     case "A1"
+                          cabnkamt = cabnkamt + rs("amount")
+                     case "A2"
+                          casdtamt = casdtamt + rs("amount")    
+                     case "A3"
+                          cachamt = cachamt + rs("amount")  
+                     case "B0"
+                          csavamt = csavamt + rs("amount")
+                     case "G3","G1","G2","G3"
+                          gamt = gamt + rs("amount")
+                     case "H3","H1","H2"
+                          hamt = hamt+rs("amount")
+                     case "C0","C1","C3"                   
+              end select
+            else 
+           if (cPeriod - mPeriod) < 0 then
+		 select case rs("code")
+                     case "A1"
+                          pabnkamt = pabnkamt + rs("amount")
+                     case "A2"
+                          pasdtamt = pasdtamt + rs("amount")    
+                     case "A3"
+                          pachamt = pachamt + rs("amount")                     
+              end select     
+            end if
+            end if
+            
+            rs.movenext
+         loop
+         rs.close   
+
+        set rs = server.createobject("ADODB.Recordset")
+        sql = " select code,amount,convert(char(7),ldate ,102) as Expr1 from loan "
+        rs.open sql, conn,1,1
+        do while not rs.eof
+           cPeriod = left(rs(2),4)&right(rs(2),2)
+           if (cPeriod - mPeriod) = 0 then
+              select case rs("code")
+                     case "D1","0D"
+                          loanamt = loanamt + rs("amount")
+                          lncnt = lncnt+1   
+                     case "D0"
+                          loanamt = loanamt - rs("amount")  
+                     case "E1","F1"
+                          cbnkamt = cbnkamt + rs("amount")
+                     case "E2","F2"
+                          csdtamt = csdtamt + rs("amount")    
+                     case "E3","F3"
+                          cchamt = cchamt + rs("amount")                     
+              end select
+            else
+            if (cPeriod - mPeriod) < 0   then
+               select case rs("code")
+                     case "E1","F1"
+                          pbnkamt = pbnkamt + rs("amount")
+                     case "E2","F2"
+                          psdtamt = psdtamt + rs("amount")    
+                     case "E3","F3"
+                          pchamt = pchamt + rs("amount")                     
+              end select     
+              end if
+            end if         
+            rs.movenext
+         loop
+         rs.close     

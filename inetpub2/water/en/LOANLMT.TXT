@@ -1,0 +1,33 @@
+	if (formObj.loanAmt.value!=""){
+		ability=parseInt(formObj.netSalary.value)
+                blnamt=parseInt(formObj.loanAmt.value)
+                sttl   =parseInt(formObj.savettl.value)
+                blmt = (sttl+ability)*2+20000 
+                sttl10 = sttl*10  
+                lmt=''
+                if (blnamt> 320000){
+                    lmt='Over 3,200,000 ³Ì°ª¶U´ÚÃB'
+                }
+                if (blnamt > 120000)&&(blnamt<=180000){  
+                   if (sttl <40000){
+                      lmt='Savubg : "+str(sttl)+less than 40,000 '
+                   }else{
+                   if (blnamt> sttl10){
+                      lmt='Savubg *10 : '+str(sttl10)' less than Loan Amount'
+                   }
+               }
+               }
+               if  (blnamt > 180000)&&(blnamt<=250000){   
+                    if (sttl <80000){
+                      lmt='Savubg : '+str(sttl)+' less than 80,000 '
+                   }else{
+                   if (blnamt> sttl10){
+                      lmt='Savubg *10 : '+str(sttl10)+' less than Loan Amount'
+                   }
+               }
+               }
+               document.all.tags( "td" )['loanlmt'].innerHTML=lmt
+               if (lmt<>""){  
+	       document.all.tags( "td" )['G3RepayAbility'].style.color ='red'
+               } 
+       }

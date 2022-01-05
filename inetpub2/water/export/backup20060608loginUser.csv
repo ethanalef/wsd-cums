@@ -1,0 +1,7 @@
+uid,username,password,userLevel,memNo,lastLoginTime,
+1,auditor,auditor,5,0,2004/7/27 下午 04:21:00,
+2,admin,admin,4,0,2004/11/2 下午 04:18:00,
+3,supervisor,supervisor,3,0,2004/3/19 下午 01:41:00,
+4,operator,operator,2,0,2004/6/12 上午 11:04:00,
+5,member,member,1,0,2004/11/2 下午 04:08:00,
+6,Preview,preview,6,0,2004/10/14 上午 11:42:00,

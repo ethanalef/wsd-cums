@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!/inetpub2/water/en
+!/inetpub2/water/SQLScript
+

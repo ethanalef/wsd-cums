@@ -1,0 +1,12 @@
+/*
+   2007年1月4日 下午 02:54:51
+   User: 
+   Server: XP-NOTEBOOK1
+   Database: wsdscu
+   Application: MS SQLEM - Data Tools
+*/
+
+'MemMaster' table
+- Unable to modify table.  
+Column name is required.
+

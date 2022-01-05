@@ -1,0 +1,6 @@
+uid,planName,deleted,
+1,"=<30,000 + 股金",False,
+2,"=<60,000 + 股金",False,
+3,"=<80,000 + 股金",False,
+4,">80,000 + 股金",False,
+5,聯名貸款,False,
