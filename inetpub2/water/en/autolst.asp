@@ -12,7 +12,7 @@ memname		=rs("memname")
 memcname	=rs("memcname")
 mbankin	=rs("bankin")
 xx 			= 0
-sttlamt 	= 0   
+sttlamt 	= 0
 ttlamt 		= 0
 ttlsamt 	= 0
 ttlasamt 	= 0
@@ -33,9 +33,9 @@ end if
 mndate	= right("0"&day(date()),2)&"/"&right("0"&month(date()),2)&"/"&year(date())
 pint 	= 0
 pamt	= 0
-samt	= 0  
+samt	= 0
 ipamt 	= 0
-ipint 	= 0 
+ipint 	= 0
 isamt	= 0
 if request.form("output")="Word" then
 	Response.ContentType = "application/msword"
@@ -51,9 +51,9 @@ Set objFile = objFSO.CreateTextFile(Server.MapPath("..\txt")&"\"&session("userna
 	objFile.Write		"水務署員工儲蓄互助社"
 	objFile.WriteLine 	""
 	objFile.Write 		"銀行轉賬細明表 "
-    objFile.WriteLine 	""	
+    objFile.WriteLine 	""
     objFile.Write 		"日期 : "&mndate
-	objFile.WriteLine 	""		
+	objFile.WriteLine 	""
 	objFile.Write 		" 社員編號 "
 	objFile.Write 		"         社員名稱                 "
 	objFile.Write 		"  利息     "
@@ -69,12 +69,12 @@ Set objFile = objFSO.CreateTextFile(Server.MapPath("..\txt")&"\"&session("userna
 	next
 	objFile.WriteLine ""
 	do while not rs.eof
-        if memno<>rs("memno") or rs.eof then  
+        if memno<>rs("memno") or rs.eof then
 			if sttlamt > 0 then
                 ttlcnt = ttlcnt + 1
                 if rs("flag") = "F" then
                    ttlxcnt = ttlxcnt + 1
-                end if 
+                end if
 				objFile.Write left(" "&memNo&spaces,10)
 				objFile.Write left(memcname&spaces,10)
 				objFile.Write right(spaces&formatnumber(pint,2),13)
@@ -92,12 +92,12 @@ Set objFile = objFSO.CreateTextFile(Server.MapPath("..\txt")&"\"&session("userna
                 pamt=0
                 samt=0
                 sttlamt = 0
-            end if 
+            end if
             memno=rs("memno")
             memname=rs("memname")
             memcname=rs("memcname")
         end if
-             
+
         select case rs("code")
             case "E1"	'銀行轉帳
                 if rs("flag")<>"F"  then
@@ -106,8 +106,8 @@ Set objFile = objFSO.CreateTextFile(Server.MapPath("..\txt")&"\"&session("userna
                     ttlASAMT=ttlASamt  + rs("bankin")
                 else
                     ipamt = rs("bankin")
-                    ttlipamt = ttlipamt + ipamt 
-                end if 
+                    ttlipamt = ttlipamt + ipamt
+                end if
             case "F1"	'銀行還息"
                     if rs("flag")<>"F" then
                            pint = rs("bankin")
@@ -116,18 +116,18 @@ Set objFile = objFSO.CreateTextFile(Server.MapPath("..\txt")&"\"&session("userna
                     else
                            ipint = rs("bankin")
 								ttlipint = ttlipint + ipint
-                    end if  
+                    end if
             case "A1"	'銀行轉帳"
                     if rs("flag")<>"F" then
                            samt = rs("bankin")
                            ttlsamt = ttlsamt + samt
                            ttlASAMT=ttlASamt  + rs("bankin")
                     else
-                            
-                           isamt = rs("bankin")                   
+
+                           isamt = rs("bankin")
                            ttlisamt = ttlisamt + isamt
-                    end if 
-			end select 
+                    end if
+			end select
             sttlamt = sttlamt + rs("bankin")
             ttlTemp=ttlTemp+rs("bankin")
 		rs.movenext
@@ -150,16 +150,16 @@ Set objFile = objFSO.CreateTextFile(Server.MapPath("..\txt")&"\"&session("userna
                  pamt=0
                  samt=0
                  sttlamt = 0
-    end if 
+    end if
 	for idx = 1 to 130
 		objFile.Write "-"
 	next
 	objFile.WriteLine ""
 	objFile.Write space(38)
     objFile.Write right(spaces&formatnumber(ttlpint,2),13)
-    objFile.Write right(spaces&formatnumber(ttlpamt,2),13) 
+    objFile.Write right(spaces&formatnumber(ttlpamt,2),13)
     objFile.Write right(spaces&formatnumber(ttlsamt,2),13)
-    objFile.Write right(spaces&formatnumber(ttlipint,2),13) 
+    objFile.Write right(spaces&formatnumber(ttlipint,2),13)
     objFile.Write right(spaces&formatnumber(ttlipamt,2),13)
     objFile.Write right(spaces&formatnumber(ttlisamt,2),13)
 	objFile.Write right(spaces&formatnumber(ttlTemp,2),15)
@@ -214,21 +214,18 @@ end if
 	<tr><td colspan=9><hr></td></tr>
 <%
 do while not rs.eof
-    if memno<>rs("memno")  then   
+    if memno<>rs("memno")  then
 
         if sttlamt > 0 then
             ttlcnt = ttlcnt + 1
             if rs("flag") = "F" then
                 ttlxcnt = ttlxcnt + 1
-            end if  
-			if memno=20 then 
-				pint=621.25 
-				sttlamt=4593.25
-			end if
+            end if
+
 			%>
 				<tr>
 					<td><%=memNo%></td>
-					<td><%=memcname%></td>              		
+					<td><%=memcname%></td>
 					<td width=80 align="right"><%=formatNumber(pint,2)%></td>
 					<td width=80 align="right"><%=formatNumber(pamt,2)%></td>
 					<td width=80 align="right"><%=formatNumber(samt,2)%></td>
@@ -246,7 +243,7 @@ do while not rs.eof
             pamt=0
             samt=0
             sttlamt = 0
-        end if 
+        end if
         memno=rs("memno")
         memname=rs("memname")
         memcname=rs("memcname")
@@ -259,8 +256,8 @@ do while not rs.eof
                     ttlASAMT=ttlASamt  + rs("bankin")
                 else
                     ipamt = rs("bankin")
-                    ttlipamt = ttlipamt + ipamt 
-                end if 
+                    ttlipamt = ttlipamt + ipamt
+                end if
             case "F1"	'"銀行還息"
                 if rs("flag")<>"F" then
 
@@ -270,18 +267,18 @@ do while not rs.eof
                 else
                     ipint = rs("bankin")
 					ttlipint = ttlipint + ipint
-                end if  
+                end if
             case "A1"	' 銀行轉帳"
                 if rs("flag")<>"F" then
                     samt = rs("bankin")
                     ttlsamt = ttlsamt + samt
                     ttlASAMT=ttlASamt  + rs("bankin")
                 else
-                    isamt = rs("bankin")                   
+                    isamt = rs("bankin")
                     ttlisamt = ttlisamt + isamt
-                end if 
-       
-    end select 
+                end if
+
+    end select
     sttlamt = sttlamt + rs("bankin")
     ttlTemp=ttlTemp+rs("bankin")
 	rs.movenext
@@ -291,7 +288,7 @@ if sttlamt > 0 then
 	%>
 	<tr>
 		<td><%=memNo%></td>
-		<td><%=memcname%></td>              		
+		<td><%=memcname%></td>
 		<td width=100 align="right"><%=formatNumber(pint,2)%></td>
 		<td width=100 align="right"><%=formatNumber(pamt,2)%></td>
 		<td width=100 align="right"><%=formatNumber(samt,2)%></td>
@@ -301,10 +298,7 @@ if sttlamt > 0 then
 		<td width=100 align="right"><%=formatNumber(sttlamt,2)%></td>
 	</tr>
 	<%
-end if 
-		ttlTemp=ttlTemp+39.60 
-		ttlasamt=ttlasamt+39.60 
-		ttlpint=ttlpint+39.6
+end if
 %>
 	<tr><td colspan=9><hr></td></tr>
 	<tr>
@@ -324,29 +318,29 @@ end if
 	<br>
         <tr>
            <td width="30"></td>
-           <td width="100" align="right"><b>銀行轉帳合共 :</b></td> 
+           <td width="100" align="right"><b>銀行轉帳合共 :</b></td>
            <td  align= "right" ><%=formatNumber(ttlasamt,2)%></td>
-          
+
        </tr>
- 
+
         <tr>
             <td width="30"></td>
-           <td width="100" align="right"><b>轉帳人數 :</b></td> 
+           <td width="100" align="right"><b>轉帳人數 :</b></td>
            <td   align= "right" ><%=formatNumber(ttlcnt-ttlxcnt,0)%></td>
-          
-       </tr> 
+
+       </tr>
         <tr>
             <td width="30"></td>
-           <td width="100" align="right"><b>脫期人數 :</b></td> 
+           <td width="100" align="right"><b>脫期人數 :</b></td>
            <td   align= "right" ><%=formatNumber(ttlxcnt,0)%></td>
-          
-       </tr> 
+
+       </tr>
        <tr>
             <td width="30"></td>
-           <td width="100" align="right"><b>人數合共 :</b></td> 
+           <td width="100" align="right"><b>人數合共 :</b></td>
            <td  align= "right" ><%=formatNumber(ttlcnt,0)%></td>
-          
-       </tr>   
+
+       </tr>
 </table>
 </font>
 </body>
