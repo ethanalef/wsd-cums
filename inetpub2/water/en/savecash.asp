@@ -121,7 +121,9 @@ if request.form("action") <> "" then
                        case "冷戶費"
                               addUserLog "增加 保險金帳  日期 : "&ldate&"(金額) $ "&amount
                              acode ="MF"
-                             
+                       case "調(+)整"
+                             addUserLog "增加 調(+)整帳  日期 : "&ldate&"(金額) $ "&amount
+                             acode ="A8"
                   end select
         conn.begintrans   
 
@@ -374,6 +376,7 @@ function validating(){
 			        <option<%if item="A" then response.write " selected" end if%>>調整</option>
                                 <option<%if item="I" then response.write " selected" end if%>>保險金</option>
                                 <option<%if item="I" then response.write " selected" end if%>>冷戶費</option>
+								<option<%if item="I" then response.write " selected" end if%>>調(+)整</option>
 			        </select>
 		                </td>   
                                 </tr>  

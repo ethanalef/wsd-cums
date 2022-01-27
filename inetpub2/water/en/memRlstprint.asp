@@ -329,10 +329,10 @@ set qs = Server.CreateObject("ADODB.Recordset")
 				             
                 end select
    select case rs("code")
-          case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7","C5"
+          case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7","C5","A8"
                
                clsbal = clsbal + rs("amount")
-          case "B0","B1","G0","G1","G3","H0","H1","H3","MF","B3","BF","BE"
+          case "B0","B1","G0","G1","G3","H0","H1","H3","MF","B3","BF","BE","B8"
                 clsbal = clsbal - rs("amount")
          end select
 

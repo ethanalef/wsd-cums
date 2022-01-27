@@ -520,11 +520,11 @@ do while not rs1.eof
 		
 			case "H7"
 				sbal(xx)=sbal(xx-1)-rs1("amount")	
-			case "G0" ,"H0","B0","B1","B3","BE","BF","G3","H3","MF" 
+			case "G0" ,"H0","B0","B1","B3","BE","BF","G3","H3","MF","B8"
 				   sbal(xx)=sbal(xx-1)-rs1("amount")
 			case   "AI","CH"
 					  sbal(xx) = sbal(xx-1)     
-			case  "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4" ,"C5"
+			case  "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4" ,"C5","A8"
 					sbal(xx) = sbal(xx-1) + rs1("amount")
 			case "E7"
 					sbal(xx) = sbal(xx-1) + rs1("amount")
@@ -570,9 +570,9 @@ do while not rs1.eof
 					scode(xx) 	= "協會費" 
 			case "MF"
 					scode(xx) 	= "冷戶費" 
-			case "E7"	
+			case "E7","A8"
 					scode(xx)  ="調(+)整"
-			case "H7"
+			case "H7","B8"
 					scode(xx)  ="調(-)整"					
 	
 		end select

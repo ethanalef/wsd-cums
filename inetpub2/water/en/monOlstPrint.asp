@@ -15,7 +15,7 @@ xidx = "#temp"&idx
 
 conn.begintrans
               conn.execute( "create table "&xidx&"  ( memno int ,lnnum char(10), ldate smalldatetime, code char(2) , amount money,lnflag char(1)) ")
-              conn.execute( "insert into "&xidx&"  (memno,ldate,code,amount ,lnflag ) select memno,ldate,code,amount,lnflag from share where (code='A0' or code='B0' or code='B1'  or code='0A' or code='A7' or code='A4' or code='MF' ) and   year(ldate) ='"&yy&"' and month(ldate) ='"&mm&"' order by memno,ldate,code "  )
+              conn.execute( "insert into "&xidx&"  (memno,ldate,code,amount ,lnflag ) select memno,ldate,code,amount,lnflag from share where (code='A0' or code='B0' or code='B1' or code='B8'  or code='0A' or code='A7' or code='A4' or code='MF' ) and   year(ldate) ='"&yy&"' and month(ldate) ='"&mm&"' order by memno,ldate,code "  )
               conn.execute( "insert into "&xidx&"  (memno,lnnum,ldate,code,amount ) select memno,lnnum,ldate,code,amount from loan  where (code='E0' or code='F0' or code='E6' or code='F6' or code='E7' or code='F7' or code='E9') and  year(ldate)='"&yy&"' and month(ldate)='"&mm&"'  order by memno,ldate,code  " )
 conn.committrans
 
@@ -116,7 +116,7 @@ do while not rs.eof
     end if
     xdate = rs("ldate")  
     select case rs("code")
-        case "B0","B1"
+        case "B0","B1","B8"
             if rs("lnflag")="Y" then
                 pkamt = pkamt + rs("amount")
                 ttlpkamt = ttlpkamt + rs("amount") 

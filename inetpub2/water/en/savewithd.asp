@@ -67,9 +67,9 @@ if request.form("Search") <> "" then
       do while not rs.eof 
    
          select case rs("code")
-                 case "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4" ,"C5","0A"
+                 case "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4" ,"C5","0A","A8"
                     ttlsave = ttlsave + rs("amount")
-                case "G0" ,"H0","B0","B1","B3","BE","BF","G3","H3","MF" 
+                case "G0" ,"H0","B0","B1","B3","BE","BF","G3","H3","MF","B8"
                      ttlsave = ttlsave - rs("amount")
          end select       
       rs.movenext
@@ -98,12 +98,14 @@ if request.form("action") <>"" then
 		TheString = Field & "= Request.Form(""" & Field & """)"
 		Execute(TheString)
 	Next
- 
+  
  	conn.begintrans
         pamt = amount
         pdate = right(ldate,4)&"/" &mid(ldate,4,2)&"/"&left(ldate,2)
         if lnflag="Y"  then
             conn.execute("insert into share (memno,code,ldate,amount,lnflag,sdesc) values ('"&memno&"','B1','"&pdate&"',"&pamt&",'"&lnflag&"','"&sdesc&"' ) ")
+        elseif chkNegAdj = "1"  then
+            conn.execute("insert into share (memno,code,ldate,amount) values ('"&memno&"','B8','"&pdate&"',"&pamt&") ")
         else
               conn.execute("insert into share (memno,code,ldate,amount) values ('"&memno&"','B1','"&pdate&"',"&pamt&") ")
         end if  
@@ -235,6 +237,17 @@ function clearln(){
          document.form1.lnflag.value = 'Y'
 } 
 }
+
+function onNegAdj() {
+	var checked = document.form1.chkNegAdj.checked;
+  if (checked) {
+		document.form1.chkNegAdj.value = "1";
+  }
+  else {
+		document.form1.chkNegAdj.value = "0";
+  }
+}
+
 function validating(){
 	formObj=document.form1;
 	reqField="";
@@ -342,7 +355,11 @@ function validating(){
 					<td width=10></td>
 					<td><input type="text" name="amount" value="<%=amount%>" size="10" maxlength="10" ></td>
 				</tr>
-
+				<tr height="22">
+					<td class="b8" align="right">調(-)整</td>
+					<td width=10></td>
+					<td><input type="checkbox" name="chkNegAdj" onClick="onNegAdj()">
+				</tr>
 	       <tr height="22">
                <td class="b8" align="right">退回回贈</td>
                <td width=10></td> 

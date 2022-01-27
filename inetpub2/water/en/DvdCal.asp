@@ -84,9 +84,9 @@ do while not rs.eof
                          next
 					xx = xx + 1
 											
-				case	"E7"
+				case	"E7","A8"
 							sbal(xx)=sbal(xx-1)+ms("amount")
-				case	"H7"
+				case	"H7","B8"
 				
 							sbal(xx)=sbal(xx-1)-ms("amount")
 
@@ -135,7 +135,7 @@ do while not rs.eof
                         next 
                         xx = xx + 1
 						
-                case  "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4" 
+                case  "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4"
                         sbal(xx) = sbal(xx-1) + ms("amount")
                         mkdate1 = dateserial(year(ms("ldate")),month(ms("ldate"))+1,1)
                         mkdate0  = ms("ldate")

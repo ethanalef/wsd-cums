@@ -42,9 +42,9 @@ Function ShareCode(ByVal x)
 					ShareCode="股息現金" 
  			case "G0","G1","G2","G3"
 					ShareCode = "入社費"
-			case "E7"	
+			case "A8"
 					ShareCode ="調(+)整"
-			case "H7"
+			case "B8"
 					ShareCode ="調(-)整"	
 			case "H0","H1","H2","H3"
 					ShareCode = "協會費" 
@@ -215,7 +215,7 @@ for i = 1 to 12
     dvdate(i)=dateserial(xyear,6+i,1)
 next  
 
-SQl = "select memno,memname,memcname,mstatus  from memmaster where  "&styfield&"  mstatus not in ('C','P','B' ) order by memno   "
+
 SQl = "select a.memno,a.memname,a.memcname,a.B1, a.B2, a.B1relation, a.B2relation, b.dttl ,b.cttl , c.ndttl ,c.ncttl    from memmaster a "&_
       " right join ( select memno ,sum( case when left(code,1)  in  ( '0','A','C' ) and code<>'AI' and code<>'CH' "&_
       "  then amount else 0 end ) as dttl , sum( case when left(code,1)  in  ( 'G','H','B' ) and code<>'MF' "&_
@@ -505,9 +505,9 @@ if not ms.eof then
 						end if 
 				next 
 				
-		case	"E7"
+		case	"A8"
                 sbal(xx)=sbal(xx-1)+ms("amount")
-		case	"H7"
+		case	"B8"
                 sbal(xx)=sbal(xx-1)-ms("amount")
 				
         case 	"B1","MF"
@@ -577,10 +577,10 @@ if not ms.eof then
         xx = xx + 1
         aa = xx
         else
-			if  left(ms("code"),1)="G" or left(ms("code"),1)="H" or left(ms("code"),1)="B" or ms("code")="MF" then        
+			if  left(ms("code"),1)="G" or left(ms("code"),1)="H" or left(ms("code"),1)="B" or ms("code")="MF" then
                     sbal(xx)=sbal(xx)-ms("amount")
             else 
-                if ms("code")="0A" or left(ms("code"),1)="C" or left(ms("code"),1)="A" or left(ms("code"),2)="E7" then 
+                if ms("code")="0A" or left(ms("code"),1)="C" or left(ms("code"),1)="A" then
                     if ms("code")<>"AI"  then  
                       sbal(xx) = sbal(xx) +ms("amount")
                     end if
@@ -608,7 +608,7 @@ end if
 
       
 	xx = 1
-	if  left(ms("code"),1)="G" or left(ms("code"),1)="H" or left(ms("code"),1)="B" or ms("code")="MF" then        
+	if  left(ms("code"),1)="G" or left(ms("code"),1)="H" or left(ms("code"),1)="B" or ms("code")="MF" then
         sbal(xx)=sbal(xx)-ms("amount")
 	end if	 
 
@@ -845,8 +845,8 @@ if xlnnum<>"" then
 							sql1 = " select * from share where memno = "& guid3                  
 							rs1.open sql1, conn, 2, 2
 							do while not rs1.eof
-								select case rs1("code")
-								case "G3","H3","B1","M"
+						 select case left(rs1("code"),1)
+								case "G","H","B","M"
 									 bal = bal - rs1("amount")
 								case "A","T","C","0"
 									if rs1("code")<>"AI" then

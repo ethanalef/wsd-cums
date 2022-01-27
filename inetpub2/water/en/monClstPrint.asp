@@ -16,7 +16,7 @@ xidx = "#temp"&idx
   conn.begintrans
 
               conn.execute( "create table "&xidx&"  ( memno int ,lnnum char(10), ldate smalldatetime, code char(2) , amount money ) ")
-              conn.execute( "insert into "&xidx&"  (memno,ldate,code,amount ) select memno,ldate,code,amount from share where (right(code,1)='3' ) and  year(ldate) ='"&yy&"' and month(ldate) ='"&mm&"' order by memno,ldate,code "  )
+              conn.execute( "insert into "&xidx&"  (memno,ldate,code,amount ) select memno,ldate,code,amount from share where (right(code,1)='3' or code='A8') and  year(ldate) ='"&yy&"' and month(ldate) ='"&mm&"' order by memno,ldate,code "  )
               conn.execute( "insert into "&xidx&"  (memno,lnnum,ldate,code,amount ) select memno,lnnum,ldate,code,amount from loan  where (right(code,1)='3' ) and year(ldate)='"&yy&"' and month(ldate)='"&mm&"'  order by memno,ldate,code  " )
     
 
@@ -110,7 +110,7 @@ elseif request.form("output")="text" then
              xdate=rs("ldate")              
            end if
            select case rs("code")
-                  case "A3"
+                  case "A3", "A8"
                         xdate = rs("ldate")  
                        samt = samt + rs("amount")                       
                        ttlsamt = ttlsamt +  rs("amount")
@@ -264,7 +264,7 @@ end if
              
            end if
            select case rs("code")
-                  case "A3"
+                  case "A3", "A8"
                         xdate = rs("ldate")  
                        samt = samt + rs("amount")                       
                        ttlsamt = ttlsamt +  rs("amount")
