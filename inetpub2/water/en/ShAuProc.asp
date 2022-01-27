@@ -12,18 +12,18 @@ server.scripttimeout = 1800
          rs.close
          cnt = 0
          set rs = conn.execute("select  memno  from dividend  where  bank='B' AND dividend > 0   group by memno order by memno " )
-         do while  not rs.eof 
+         do while  not rs.eof
             cnt = cnt + 1
             rs.movenext
          loop
          rs.close
- 
+
 	 set rs = server.createobject("ADODB.Recordset")
          sql  = "select a.memno,a.dividend ,b.memcname,b.memname,b.bnk,b.bch,b.bacct from dividend a ,memmaster b where a.memno=b.memno  and a.bank='B'   order by a.memno,b.memcname,b.memname,b.bnk,b.bch,b.bacct "
          rs.open sql, conn,1,1
          if rs.eof then
- 
-        '    response.redirect "menu.asp" 
+
+        '    response.redirect "menu.asp"
          end if
 
 
@@ -36,16 +36,16 @@ ttlamt = 0
         mn  = month(date())
         xmn=  "SEP"
 
-        xcnt= right("00000"&cnt,5)        
+        xcnt= right("000000"&cnt,7)
         xdate = "11"&"09"&yr
-        
+
 	spaces=""
 	for idx = 1 to 50
 		spaces=spaces&" "
 	next
 
         xmark1 = left(xmn&" "&yr&spaces,12)
-        xttl = right("000000000"&sumttl,10)
+        xttl = right("000000000000"&sumttl,12)
 
 
 	Set objFSO = Server.CreateObject("Scripting.FileSystemObject")
@@ -53,27 +53,27 @@ ttlamt = 0
 
 	objFile.Write "F"
         objFile.Write "024062010001"
-        objFile.Write "N01"
+        objFile.Write "F01"
         objFile.Write xmark1
-        objFile.Write xdate   
-	objFile.Write "K********"      
-        objFile.Write xcnt 
-        objFile.Write  xttl
+        objFile.Write xdate
+	objFile.Write "K********               "
+        objFile.Write xcnt
+        objFile.Write xttl
 
-        objFile.Write  "                     1"
+        objFile.Write "  1"
         xx = 0
- do while  NOT rs.eof                 
+ do while  NOT rs.eof
         xx = xx + 1
       if rs("memno")="4660" or rs("memno")="3568" or rs("memno")="2453" or rs("memno")="2580" or rs("memno")="4457" or rs("memno")="4318" then
-            
-          memno = right("     "&rs("memno"),4) 
-        else   
-          memno = right("     "&rs("memno"),5) 
-       end if  
+
+          memno = right("     "&rs("memno"),4)
+        else
+          memno = right("     "&rs("memno"),5)
+       end if
         memname = rs("memname")
         pos = instr(memname,", ")
            if pos > 0 then
-              memname = left(rs("memname"),pos)&mid(rs("memname"),pos+2,len(rs("memname"))-pos)            
+              memname = left(rs("memname"),pos)&mid(rs("memname"),pos+2,len(rs("memname"))-pos)
            end if
        if len(memname)>= 20 then
           memname = left(memname,20)
@@ -85,16 +85,16 @@ ttlamt = 0
 
         objFile.Write " NO"
         objFile.Write  left(memno&spaces,10)
-        objFile.Write  left(memname&spaces,20)  
+        objFile.Write  left(UCase(memname)&spaces,20)
          objFile.Write left(xbnk&spaces,15)
- 
-       
+
+
         samt = rs(1)*100
-        nsamt = right("0000000000"&samt,10)   
+        nsamt = right("0000000000"&samt,10)
         objFile.Write  nsamt
         objFile.Write  left(spaces,22)
-        
-      
+
+
     rs.movenext
     loop
    objFile.Close
@@ -104,10 +104,10 @@ ttlamt = 0
 	set conn=nothing
 
 
-  
+
     RESPONSE.REDIRECT "COMPLETED.ASP"
 
- 
+
 
 %>
 <html>

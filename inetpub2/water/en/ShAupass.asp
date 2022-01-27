@@ -14,7 +14,7 @@
 <!-- #include file="menu.asp" -->
 <div align="center"><center>
 <br><b12>»È¦æ¬£®§ºÏºÐ«Ø¥ß</b>
-<form method="post" action="ShAuproc.asp" name="form1">
+<form method="post" action="genshpay.asp" name="form1">
 <table border="0" cellpadding="0" cellspacing="0">
 
    

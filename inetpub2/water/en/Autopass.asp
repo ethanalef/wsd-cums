@@ -14,7 +14,7 @@
 <!-- #include file="menu.asp" -->
 <div align="center"><center>
 <br><b12>銀行轉帳磁碟建立</b>
-<form method="post" action="Autoproc.asp" name="form1">
+<form method="post" action="autoproc.asp" name="form1">
 <table border="0" cellpadding="0" cellspacing="0">
 
    
