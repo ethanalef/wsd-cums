@@ -90,9 +90,9 @@ server.scripttimeout = 1800
              
             end if
                select case rs("code")
-                      case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7"
+                      case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7","A8"
                            savettl = savettl + rs("ammt")
-                      case "B0","B1","G0","G1","G3","H0","H1","H3","MF"
+                      case "B0","B1","G0","G1","G3","H0","H1","H3","MF","B8"
                            savettl = savettl - rs("ammt") 
                end select 
                if rs("code")<>"CH" then
@@ -150,9 +150,9 @@ server.scripttimeout = 1800
                xmstatus=rs("mstatus") 
             end if
                select case rs("code")
-                      case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7"
+                      case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7","A8"
                            savettl = savettl + rs("ammt")
-                      case "B0","B1","G0","G1","G3","H0","H1","H3","MF"
+                      case "B0","B1","G0","G1","G3","H0","H1","H3","MF","B8"
                            savettl = savettl - rs("ammt") 
                end select 
              
@@ -337,9 +337,9 @@ server.scripttimeout = 1800
 
             if rs1("pydate")<  nperiod then
                select case rs1("code")
-                      case "0A", "A1","A2","A3","C0","C1","C3","A0","A4","A7"
+                      case "0A", "A1","A2","A3","C0","C1","C3","A0","A4","A7","A8"
                            ttlamt = ttlamt + rs1("amount")
-                      case "B0","B1","B2","B3","G0","G1","G3","H0","H1","H3","MF"
+                      case "B0","B1","B2","B3","G0","G1","G3","H0","H1","H3","MF","B8"
                            ttlamt = ttlamt - rs1("amount")
              end select
              else
@@ -351,7 +351,7 @@ server.scripttimeout = 1800
                            bnkamt = bnkamt + rs1("amount")
                       case "A2"
                            sadamt = sadamt + rs1("amount")
-                      case  "A3" ,"0A"
+                      case  "A3" ,"0A", "A8"
                           chamt = chamt + rs1("amount")
                       case "A0","A4","A7"
                            ajshamt = ajshamt + rs1("amount")
@@ -368,14 +368,15 @@ server.scripttimeout = 1800
                           else
                               withdamt = withdamt + rs1("amount")
                           end if
-                           
+
                       case "B0"
                             if rs1("amount") >= 0 then
                                ajwdamt = ajwdamt + rs1("amount")
                             else
                                ajshamt = ajshamt + rs1("amount")*-1
                             end if
-
+                      case "B8"
+                         ajwdamt = ajwdamt + rs1("amount")
                       case "B6"
                             ajshamt = ajshamt + rs1("amount")
                   case "G3"
