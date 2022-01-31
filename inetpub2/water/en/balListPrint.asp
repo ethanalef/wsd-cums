@@ -376,7 +376,7 @@ server.scripttimeout = 1800
                                ajshamt = ajshamt + rs1("amount")*-1
                             end if
                       case "B8"
-                         ajwdamt = ajwdamt + rs1("amount")
+                         withdamt = withdamt + rs1("amount")
                       case "B6"
                             ajshamt = ajshamt + rs1("amount")
                   case "G3"
