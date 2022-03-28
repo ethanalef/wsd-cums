@@ -12,22 +12,22 @@ mm = cint(right(mPeriod,2))
 xyy =  yy
 xmm = mm + 1
 if xmm= 13 then
-   xyy = xyy + 1
-   xmm = xmm - 12
+  xyy = xyy + 1
+  xmm = xmm - 12
 end if
 xdd= 1
 
 nPeriod = left(mPeriod,4)&"."&right(mPeriod,2)&".01"
 pPeriod = xyy&"."&right("0"&xmm,2)&".01"
 xperiod = xyy&"/"&right("0"&xmm,2)&"/"&"01"
-xxdate=DateSerial(yy,mm,1)
-yydate=dateSerial(yy,mm+1,1-1)
+xxdate = DateSerial(yy,mm,1)
+yydate = dateSerial(yy,mm+1,1-1)
 
 ryy = yy
 rmm = mm - 1
 if rmm=0 then
-    ryy = yy - 1
-    rmm = 12
+  ryy = yy - 1
+  rmm = 12
 end if
 RPeriod = ryy&rmm
         actln = 0
