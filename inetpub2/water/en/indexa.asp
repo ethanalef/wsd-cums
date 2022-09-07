@@ -9,22 +9,22 @@ if request("From") = Request.ServerVariables("script_name") and request.form("us
 	reg.Global = True
 	username=reg.replace(request("username"),"")
 	password=reg.replace(request("password"),"")
-	
+
 	If ValidateUser(username, password) Then
-		
+
 		If LoadData(session("username")) Then
 			Response.redirect "en/main.asp"
 		else
 			msg = "Error Occured While Loading User Rights"
 		End If
-		
+
 	Else
 		msg = "Login Failed"
 	End If
-	
-		
 
-    
+
+
+
 end if
 
 %>
@@ -136,7 +136,7 @@ End Function
 
 Function LoadData(username)
 	Dim rs, sSql
-	
+
 
 
 	sSql = "Select * FROM userRights WHERE Username = '"& username &"' "
@@ -150,7 +150,7 @@ Function LoadData(username)
 		rs.MoveFirst
 
 		' Get the field contents
-		
+
 		Session("userRight_x_Member1") = rs("Member1")
 		Session("userRight_x_Member2") = rs("Member2")
 		Session("userRight_x_Member3") = rs("Member3")
@@ -191,7 +191,7 @@ Function LoadData(username)
 		Session("userRight_x_AutoPay11") = rs("AutoPay11")
 		Session("userRight_x_AutoPay12") = rs("AutoPay12")
                 Session("userRight_x_AutoPay13") = rs("AutoPay13")
-                              
+
                  Session("userRight_x_MemAcct1") = rs("MemAcct1")
 		Session("userRight_x_Saving1") = rs("Saving1")
 		Session("userRight_x_Saving2") = rs("Saving2")
@@ -202,9 +202,9 @@ Function LoadData(username)
 		Session("userRight_x_Saving7") = rs("Saving7")
 		Session("userRight_x_Saving8") = rs("Saving8")
 		Session("userRight_x_Saving9") = rs("Saving9")
-                Session("userRight_x_Saving10") = rs("Saving10")  
+		Session("userRight_x_Saving10") = rs("Saving10")
 		Session("userRight_x_Saving11") = rs("Saving11")
-                Session("userRight_x_Saving12") = rs("Saving12")             		
+		Session("userRight_x_Saving12") = rs("Saving12")
 		Session("userRight_x_Reporting1") = rs("Reporting1")
 		Session("userRight_x_Reporting2") = rs("Reporting2")
 		Session("userRight_x_Reporting3") = rs("Reporting3")
@@ -216,17 +216,17 @@ Function LoadData(username)
 		Session("userRight_x_Reporting9") = rs("Reporting9")
 		Session("userRight_x_Reporting10") = rs("Reporting10")
 		Session("userRight_x_Reporting11") = rs("Reporting11")
-                Session("userRight_x_Reporting12") = rs("Reporting12")
-                Session("userRight_x_Reporting13") = rs("Reporting13")
-                Session("userRight_x_Reporting14") = rs("Reporting14")
-                Session("userRight_x_Reporting15") = rs("Reporting15")
-                Session("userRight_x_Reporting16") = rs("Reporting16")
+		Session("userRight_x_Reporting12") = rs("Reporting12")
+		Session("userRight_x_Reporting13") = rs("Reporting13")
+		Session("userRight_x_Reporting14") = rs("Reporting14")
+		Session("userRight_x_Reporting15") = rs("Reporting15")
+		Session("userRight_x_Reporting16") = rs("Reporting16")
 		Session("userRight_x_Reporting17") = rs("Reporting17")
-                Session("userRight_x_Reporting18") = rs("Reporting18")
-                Session("userRight_x_Reporting19") = rs("Reporting19")
-                Session("userRight_x_Statist1") = rs("Statist1")
-                Session("userRight_x_Statist2") = rs("Statist2")
-                Session("userRight_x_Statist3") = rs("Statist3")  
+		Session("userRight_x_Reporting18") = rs("Reporting18")
+		Session("userRight_x_Reporting19") = rs("Reporting19")
+		Session("userRight_x_Statist1") = rs("Statist1")
+		Session("userRight_x_Statist2") = rs("Statist2")
+		Session("userRight_x_Statist3") = rs("Statist3")
 		Session("userRight_x_Other4") = rs("Other4")
 		Session("userRight_x_Other3") = rs("Other3")
 		Session("userRight_x_Other2") = rs("Other2")

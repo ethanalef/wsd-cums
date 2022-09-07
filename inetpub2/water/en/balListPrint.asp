@@ -30,301 +30,269 @@ if rmm=0 then
   rmm = 12
 end if
 RPeriod = ryy&rmm
-        actln = 0
-         glnamt = 0
+  actln = 0
+  glnamt = 0
+
+
 server.scripttimeout = 1800
-        set rs = conn.execute("select count(*) from memmaster where memdate>='"&xxdate&"' and memdate <='"&yydate&"' ")
-         if not rs.eof then
-           
-               nmemcnt = rs(0)
-         end if 
-         rs.close       
+set rs = conn.execute("select count(*) from memmaster where memdate>='"&xxdate&"' and memdate <='"&yydate&"' ")
+if not rs.eof then
+  nmemcnt = rs(0)
+end if
+rs.close
 
- 
+vmemcnt = 0
+bmemcnt = 0
+cmemcnt = 0
+dmemcnt = 0
+set rs = server.createobject("ADODB.Recordset")
+savettl = 0
+sql = "select a.memno,a.ldate,a.code,a.amount as ammt,b.memdate,b.mstatus "&_
+							" from share a,memmaster b where a.memno=b.memno and "&_
+							"a.ldate<='"&yydate&"'   order by a.memno,a.ldate,a.code,b.membday ,b.mstatus "
+rs.open sql, conn, 1, 1
 
-        
-  
-         vmemcnt = 0
-         bmemcnt = 0
-         cmemcnt = 0
-         dmemcnt = 0 
-         set rs = server.createobject("ADODB.Recordset")   
-         savettl = 0
-         sql = "select a.memno,a.ldate,a.code,a.amount as ammt,b.memdate,b.mstatus "&_
-                       " from share a,memmaster b where a.memno=b.memno and "&_                     
-                       "a.ldate<='"&yydate&"'   order by a.memno,a.ldate,a.code,b.membday ,b.mstatus "
-         rs.open sql, conn, 1, 1 
-        
-         IF NOT RS.EOF  THEN
-            xmemno=rs(0)
-           
-         do while  not rs.eof 
-            if xmemno <> rs("memno") then 
-               if savettl = 0  and xldate>=xxdate and xldate<=yydate then
-                  set ms=conn.execute("select mstatus from memmaster where memno='"&xmemno&"' ")
-              
-                  if not ms.eof then
- 
-                  select case ms("mstatus")
-  
-                         case "C"
- 
-                              cmemcnt = cmemcnt + 1
-                         case "B"
-            
-                              bmemcnt = bmemcnt + 1
-                         case "V"
- 
-                              vmemcnt = vmemcnt + 1
-                         case "P"
-                              pmemcnt = pmemcnt + 1
-                         case "D"
-                              dmemcnt = dmemcnt + 1
-                    end select 
-                  end if
-            
-               ms.close
-                   end if
-               savettl = 0
-               xmemno= rs(0)
-             
-            end if
-               select case rs("code")
-                      case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7","A8"
-                           savettl = savettl + rs("ammt")
-                      case "B0","B1","G0","G1","G3","H0","H1","H3","MF","B8"
-                           savettl = savettl - rs("ammt") 
-               end select 
-               if rs("code")<>"CH" then
-                  xldate = rs("ldate")
-               end if
-              
-         rs.movenext
-         loop
-              if savettl = 0 and xldate>=xxdate and xldate<=yydate then
-              if savettl = 0  and xldate>=xxdate and xldate<=yydate then
-                  set ms=conn.execute("select mstatus from memmaster where memno='"&xmemno&"' ")
-                  if not ms.eof then
-                  select case ms("mstatus")
-  
-                         case "C"
-                              cmemcnt = cmemcnt + 1
-                         case "B"
-                            
-                              bmemcnt = bmemcnt + 1
-                         case "V"
-                              vmemcnt = vmemcnt + 1
-                         case "P"
-                               pmemcnt = pmemcnt + 1
-                         case "D"
-                              dmemcnt = dmemcnt + 1
-                   end select 
-               end if
-             
-               ms.close
-               end if  
-               end if
-         END IF
-         rs.close 
- 
+IF NOT RS.EOF  THEN
+	xmemno=rs(0)
+
+do while  not rs.eof
+	if xmemno <> rs("memno") then
+		if savettl = 0  and xldate>=xxdate and xldate<=yydate then
+			set ms=conn.execute("select mstatus from memmaster where memno='"&xmemno&"' ")
+
+			if not ms.eof then
+				select case ms("mstatus")
+					case "C"
+						cmemcnt = cmemcnt + 1
+					case "B"
+						bmemcnt = bmemcnt + 1
+					case "V"
+						vmemcnt = vmemcnt + 1
+					case "P"
+						pmemcnt = pmemcnt + 1
+					case "D"
+						dmemcnt = dmemcnt + 1
+					end select
+			end if
+			ms.close
+
+		end if
+		savettl = 0
+		xmemno= rs(0)
+	end if
+
+	select case rs("code")
+		case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7","A8"
+			savettl = savettl + rs("ammt")
+		case "B0","B1","G0","G1","G3","H0","H1","H3","MF","B8"
+			savettl = savettl - rs("ammt")
+	end select
+	if rs("code")<>"CH" then
+		xldate = rs("ldate")
+	end if
+
+	rs.movenext
+loop
+
+END IF
+rs.close
+
          savettl = 0
          sql = "select a.memno,a.code,a.amount as ammt,b.memdate,b.mstatus "&_
-                       " from share a,memmaster b where a.memno=b.memno and "&_                     
+                       " from share a,memmaster b where a.memno=b.memno and "&_
                        "a.ldate<'"&xxdate&"'   order by a.memno,a.code,b.membday ,b.mstatus "
-         rs.open sql, conn, 1, 1 
-        
+         rs.open sql, conn, 1, 1
+
          IF NOT RS.EOF  THEN
             xmemno=rs(0)
             xmstatus=rs("mstatus")
-         do while  not rs.eof 
-            if xmemno <> rs("memno") then 
+         do while  not rs.eof
+            if xmemno <> rs("memno") then
                if savettl > 0  then
- 
-                 
+
+
                   memcnt = memcnt + 1
- 
-                      
+
+
                end if
                savettl = 0
                xmemno= rs(0)
-               xmstatus=rs("mstatus") 
+               xmstatus=rs("mstatus")
             end if
                select case rs("code")
                       case "0A","A1","A2","A3","C0","C1","C3","A0","A4","A7","A8"
                            savettl = savettl + rs("ammt")
                       case "B0","B1","G0","G1","G3","H0","H1","H3","MF","B8"
-                           savettl = savettl - rs("ammt") 
-               end select 
-             
+                           savettl = savettl - rs("ammt")
+               end select
+
          rs.movenext
          loop
               if savettl > 0  then
-                 
+
                   memcnt = memcnt + 1
-                  
+
                end if
          END IF
-         rs.close 
+         rs.close
+
+				qeury = "select code, sum(amount) from loan where ldate < '"&nperiod&"' group by code"
+				set rs1 = conn.execute(qeury)
+				do while  not rs1.eof
+					lcode = rs1(0)
+					samt = rs1(1)
+					select case rs1(0)
+						case "0D"
+							glnamt = glnamt + samt
+						case "D8","E0","E1","E2","E3","E6","E7","EC"
+							glnamt = glnamt - samt
+						case "D9"
+							qeury = "select sum(b.appamt) from loan a ,loanrec b where a.lnnum=b.lnnum and code='D9' and a.ldate < '"&nperiod&"'"
+							set ms1 =  conn.execute(qeury)
+							samt = ms1(0)
+							glnamt = glnamt + samt
+							ms1.close
+					end select
+					rs1.movenext
+				loop
+				rs1.close
 
 
-      
-     
- 
-
-        set rs1 = conn.execute("select code,sum(amount) from loan where ldate < '"&nperiod&"' group by  code  ")
-        do while  not rs1.eof    
-            select case rs1(0)
-                   case "0D"
-                        glnamt  =  glnamt + rs1(1)  
-                   case "D9"
-
-                             set ms1 =  conn.execute("select sum(appamt) from loanrec where  lndate>'2008/04/30' and  lndate < '"&nperiod&"'     ")
-                               glnamt  =  glnamt +   ms1(0)
-                               ms1.close   
-                  case "D8","E0","E1","E2","E3","E6","E7","EC"
-                        glnamt = glnamt - rs1(1)
-                 
-             end select
-         rs1.movenext
-         loop 
-         rs1.close
-                    
- 
          set rs = conn.execute("select chequeamt,appamt,lnflag from loanrec where lndate >= '"&nperiod&"' and lndate <'"&pperiod&"'   ")
-         do while  not rs.eof    
+         do while  not rs.eof
             if rs(2)="Y" then
-               actln  =  actln + rs(0)          
+               actln  =  actln + rs(0)
             else
                actln = actln + rs(1)
             end if
          rs.movenext
          loop
-         rs.close  
- 
+         rs.close
+
 
          nwlncnt = 0
          set rs = conn.execute("select  COUNT(*) AS Expr1 from loanrec where lndate >= '"&xxdate&"' and lndate <='"&yydate&"'  ")
          if not rs.eof    then
- 
+
              nwlncnt =  rs(0)
 
-         END IF 
+         END IF
          rs.close
          nwclncnt = 0
          set rs = conn.execute("select  COUNT(*) AS Expr1 from loanrec where lndate >= '"&xxdate&"' and lndate <='"&yydate&"' and lnflag='Y'  ")
          if not rs.eof    then
- 
+
              nwclncnt =  rs(0)
 
-         END IF 
+         END IF
          rs.close
          clncnt = 0
          set rs = conn.execute("select  COUNT(*) AS Expr1 from loanrec where cleardate >= '"&xxdate&"' and cleardate <='"&yydate&"' ")
          if not rs.eof    then
- 
+
              clncnt =  rs(0)
 
-         END IF 
+         END IF
          rs.close
-         pcclncnt = 0    
-             
+         pcclncnt = 0
+
          set rs = conn.execute("select memno,code,amount,lnnum from  loan where   CODE IN ('0D','D8','D9','E0','E1','E2','E3','E6','E7','EC' ) AND ldate < '"&xxdate&"'  order by memno,ldate,code ")
          memno=rs(0)
          xamt = 0
-         do while  not rs.eof   
-            
+         do while  not rs.eof
+
          if memno= rs(0) then
             select case rs(1)
                    case "0D"
-                        xamt  =   rs(2)  
+                        xamt  =   rs(2)
                    case "D9"
 
                              set ms1 =  conn.execute("select appamt from loanrec where  lnnum='"&rs("lnnum")&"'  ")
                                xamt  =  xamt +   ms1(0)
-                               ms1.close   
+                               ms1.close
                   case "D8","E0","E1","E2","E3","E6","E7","EC"
                         xamt  = xamt - rs(2)
-                 
+
              end select
- 
+
           else
-    
+
                if xamt > 0 then
                    plncnt =  plncnt +1
                end if
-               memno = rs(0)  
-               xamt = rs(2)  
-               
-         end if       
- 
-          
+               memno = rs(0)
+               xamt = rs(2)
+
+         end if
+
+
          rs.movenext
- 
+
          loop
-        
-         rs.close   
-       
+
+         rs.close
+
              if xamt > 0 then
                    plncnt =  plncnt +1
-               end if          
-     
-         
+               end if
+
+
          set rs = conn.execute("select appamt,bal,chequeamt,convert(char(10),lndate,102) as slndate   from loanrec where repaystat='N' and lndate< '"&xperiod&"'  ")
          do while not rs.eof
-          
-            if rs("slndate")>= nperiod  then   
-               
+
+            if rs("slndate")>= nperiod  then
+
                ttllnamt = ttllnamt + rs("appamt")
                ttlbal   = ttlbal + rs("bal")
            else
                ottllnamt = ottllnamt + rs("chequeamt")
                ottlbal = ittlbal + rs("bal")
            end if
-           
+
            rs.movenext
         loop
         rs.close
- 
+
         ttlnwlnamt = 0
          set rs = conn.execute("select code,sum(amount) as samount from loan where  ldate >='"&nperiod&"' and ldate <'"&xperiod&"' group by code  ")
          do while not rs.eof
-         
 
-   
- 
+
+
+
                select case rs("code")
                       case  "E1"
                            lbnkamt =  rs("samount")
                       case "E2"
                           lsadamt = rs("samount")
-                      case  "E3" 
+                      case  "E3"
                           lchamt =  rs("samount")
                       case "E0","E6","E7","EC"
-                          ajlnamt =ajlnamt + rs("samount") 
+                          ajlnamt =ajlnamt + rs("samount")
                       case  "F1"
                            ibnkamt =  rs("samount")
                       case "F2"
                           isadamt = rs("samount")
-                      case  "F3" 
+                      case  "F3"
                           ichamt =  rs("samount")
                       case "F0","F6","F7"
                           ajintamt = ajintamt + rs("samount")
 
- 
+
                       case "ET"
                            esavamt = rs("samount")
                       case "FT"
                            fsavamt =  rs("samount")
                      case "EC"
                           ajlnamt =ajlnamt + rs("samount")
-             end select                    
+             end select
 
-               
-          
+
+
              rs.movenext
              loop
-         rs.close          
-    
+         rs.close
+
         ajshamt = 0
          if nperiod >"2008.04.30" then
             ttlamt = 0
@@ -343,7 +311,7 @@ server.scripttimeout = 1800
                            ttlamt = ttlamt - rs1("amount")
              end select
              else
-              
+
                select case rs1("code")
                       case "MF"
                            ajwdamt = ajwdamt + rs1("amount")
@@ -357,7 +325,7 @@ server.scripttimeout = 1800
                            ajshamt = ajshamt + rs1("amount")
                       case "C3"
                            divamt3 = divamt3 + rs1("amount")
-                      
+
                       case "C1"
                            divamt1 = divamt1 + rs1("amount")
                       case "C0"
@@ -391,14 +359,14 @@ server.scripttimeout = 1800
 			Gamt1 = Gamt1+rs1("amount")
                   case "H1"
 			Hamt1 = Hamt1+rs1("amount")
-               
-             end select                    
+
+             end select
              end if
-      
+
              rs1.movenext
              loop
          rs1.close
-         
+
          csttlamt = bnkamt+sadamt+chamt-gamt3-hamt3+ ajshamt+0
          cwttlamt = withdamt+ajwdamt+0
          cajttlamt = ajshamt+ ajdivamt+ajlnamt+ajintamt+0
@@ -411,19 +379,19 @@ server.scripttimeout = 1800
          ttlbnk =  lbnkamt+bnkamt + ibnkamt + divamt1+0
          ttlsad =  lsadamt+sadamt + isadamt+0
          ttlch  =  lchamt +chamt  + ichamt + divamt3 +0
-         ttlrec = ttlbnk + ttlsad + ttlch + cajttlamt+0 
+         ttlrec = ttlbnk + ttlsad + ttlch + cajttlamt+0
          gttlamt = csttlamt+ttlamt-cwttlamt+ttldiv+0
-              
+
          payamt = actln + withdamt +0
 	 ttlpay = payamt + ajwdamt +0
-        
+         glnamt = glnamt + 552.57
          actlnamt = glnamt + cloanamt - cpayamt +0
          actlncnt = plncnt +nwlncnt - clncnt  +0
          oclncnt  = clncnt -nwclncnt
-         ttlmem = memcnt 
-       
+         ttlmem = memcnt
+
          actmem = memcnt   +0+ nmemcnt-cmemcnt-pmemcnt -bmemcnt +0-vmemcnt -dmemcnt
-         gttlrate= round(actlnamt / gttlamt*100,0) +0 
+         gttlrate= round(actlnamt / gttlamt*100,0) +0
 
 if request.form("output")="word" then
 	Response.ContentType = "application/msword"
@@ -434,7 +402,7 @@ end if
 %>
 <html>
 <head>
-<title>–る眀参璸</title>
+<title>–る眀参璸?C??</title>
 <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=big5">
 <link href="../main.css" rel="stylesheet" type="text/css">
 </head>
@@ -449,26 +417,26 @@ end if
   </tr>
 	<tr>
         <td>&nbsp</td>
-        <td align="center"><b><font size="4"  face="夹发砰" >叭竝纗籛が<br>–る眀参璸</font></b?</td>
+        <td align="center"><b><font size="4"  face="夹发砰" >?舭雀p???u纗籛が?U??<br>–る眀参璸??</font></b?</td>
         <td align="center"><font size="2"  face="夹发砰" >ら戳 : <%=mndate%></font></td>
         </tr>
-       
+
 
 </table>
 <table border="1" cellspacing="1" cellpadding="4" align="center"  bgcolor="336699">
 	<tr bgcolor="#FFFFFF" align="center">
 		<td><font size="2" ><%=yy%>/<%=right("0"&mm,2)%></font></td>
-		<td><font size="2" >蝗︽</font></td>
-		<td><font size="2" >畐┬</font></td>
-		<td><font size="2" >瞷</font></td>
-		<td><font size="2" >秸俱</font></td>
+		<td><font size="2" >蝗?@︽</font></td>
+		<td><font size="2" >畐?@┬</font></td>
+		<td><font size="2" >瞷?@??</font></td>
+		<td><font size="2" >秸?@俱</font></td>
 		<td><font size="2" ><%=mm%>る</font></td>
 		<td><font size="2" ><%=rmm%>る</font></td>
-		<td><font size="2" >羆 挡</font></td>
+		<td><font size="2" >羆 ?@挡</font></td>
 
 	</tr>
         <tr bgcolor="#FFFFFF">
-             <td>  </td>
+					<td>  ?血鳌@</td>
              <td align="right" ><%=formatnumber(bnkamt,2)%></td>
 	     <td align="right" ><%=formatnumber(sadamt,2)%></td>
 	     <td align="right" ><%=formatnumber(chamt-Gamt3-Hamt3,2)%></td>
@@ -478,129 +446,129 @@ end if
 	     <td align="right" ><%=formatnumber(gttlamt,2)%></td>
         </tr> 
          <tr bgcolor="#FFFFFF">
-             <td>  癶</td>
+             <td>  癶?选@</td>
              <td align="right" ><%=formatnumber(withdamt,2)%></td>
-	     <td></td>
-	     <td></td>
+	     <td>?@</td>
+	     <td>?@</td>
              <td align="right" ><%=formatNUMBER(ajwdamt,2)%></td>	     
 	     <td align="right" ><%=formatnumber(cwttlamt,2)%></td>
-             <td></td>
-	     <td></td>
+             <td>?@</td>
+	     <td>?@</td>
         </tr>  
          <tr bgcolor="#FFFFFF">
-             <td>  </td>
+             <td>  ?旬А@</td>
              <%if divamt1 <> 0 then %>
              <td align="right" ><%=formatnumber(divamt1,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if divamt2 <> 0 then %>
 	     <td align="right" ><%=formatnumber(divamt2,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if divamt3 <> 0 then %>
 	     <td align="right" ><%=formatnumber(divamt3,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if ajdivamt <> 0 then %>
              <td align="right" ><%=formatNUMBER(ajdivamt,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if ttldiv <> 0 then %> 
 	     <td align="right" ><%=formatnumber(ttldiv,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
-             <td></td>
-	     <td></td>
+             <td>?@</td>
+	     <td>?@</td>
         </tr>   
          <tr bgcolor="#FFFFFF">
-             <td>  禪蹿</td>
+             <td>  禪蹿?@</td>
              <td align="right" ><%=formatnumber(actln,2)%></td>
-	     <td></td>
-	     <td></td>
-             <td></td>	     
+	     <td>?@</td>
+	     <td>?@</td>
+             <td>?@</td>	     
 	     <td align="right" ><%=formatnumber(cloanamt,2)%></td>
              <td align="right" ><%=formatNUMBER(glnamt,2)%></td>
 	     <td align="right" ><%=formatNUMBER(actlnamt,2)%></td>
         </tr>  
          <tr bgcolor="#FFFFFF">
-             <td>  临蹿</td>
+             <td>  临蹿?@</td>
              <td align="right" ><%=formatnumber(lbnkamt,2)%></td>
 	     <td align="right" ><%=formatnumber(lsadamt,2)%></td>
 	     <td align="right" ><%=formatnumber(lchamt,2)%></td>
              <td align="right" ><%=formatnumber(ajlnamt,2)%></td>	     
 	     <td align="right" ><%=formatnumber(cpayamt,2)%></td>
-             <td></td>
-	     <td></td>
+             <td>?@</td>
+	     <td>?@</td>
         </tr>  
         <tr bgcolor="#FFFFFF">
-             <td>  </td>
+             <td>  ?Q?А@</td>
              <td align="right" ><%=formatnumber(ibnkamt,2)%></td>
 	     <td align="right" ><%=formatnumber(isadamt,2)%></td>
 	     <td align="right" ><%=formatnumber(ichamt,2)%></td>
              <td align="right" ><%=formatnumber(ajintamt,2)%></td>	     
 	     <td align="right" ><%=formatnumber(cintamt,2)%></td>
-             <td></td>
-	     <td></td>
+             <td>?@</td>
+	     <td>?@</td>
         </tr> 
        <tr bgcolor="#FFFFFF">
-             <td>  穦禣</td>
+             <td>  ?J穦禣</td>
              <%if gamt1 <> 0 then %>
              <td align="right" ><%=formatnumber(gamt1,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if gamt2 <> 0 then %>
 	     <td align="right" ><%=formatnumber(gamt2,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if gamt3 <> 0 then %>
 	     <td align="right" ><%=formatnumber(gamt3,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
-             <td></td>	
+             <td>?@</td>	
              <%if ttlgamt <> 0 then %>     
 	     <td align="right" ><%=formatnumber(ttlgamt,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
-             <td></td>
-	     <td></td>
+             <td>?@</td>
+	     <td>?@</td>
         </tr> 
       <tr bgcolor="#FFFFFF">
-             <td>  穦禣</td>
+             <td>  ?蠓|禣</td>
              <%if hamt1 <> 0 then %>
              <td align="right" ><%=formatnumber(hamt1,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if hamt2 <> 0 then %>
 	     <td align="right" ><%=formatnumber(hamt2,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
              <%if hamt3 <> 0 then %>
 	     <td align="right" ><%=formatnumber(hamt3,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
-             <td></td>	     
+             <td>?@</td>	     
              <%if ttlHamt <> 0 then %>
 	     <td align="right" ><%=formatnumber(ttlHamt,2)%></td>
              <%else%>
-             <td></td>
+             <td>?@</td>
              <%end if%>
-             <td></td>
-	     <td align="center">禪蹿/</td>
+             <td>?@</td>
+	     <td align="center">禪蹿/?血?</td>
         </tr> 
       <tr bgcolor="#FFFFFF">
-             <td>  Μ</td>
+             <td>  Μ?@?J</td>
              <td align="right" ><%=formatnumber(ttlbnk,2)%></td>
 	     <td align="right" ><%=formatnumber(ttlsad,2)%></td>
 	     <td align="right" ><%=formatnumber(ttlch,2)%></td>
@@ -612,97 +580,96 @@ end if
         </tr> 
         <BR>
      <tr bgcolor="#FFFFFF">
-             <td>  や</td>
+             <td>  や?@?X</td>
              <td align="right" ><%=formatnumber(payamt,2)%></td>
-	     <td></td>
-	     <td></td>
+	     <td>?@</td>
+	     <td>?@</td>
              <td align="right" ><%=formatnumber(ajwdamt,2)%></td>	     
 	     <td align="right" ><%=formatnumber(ttlpay,2)%></td>
-             <td align="right" ></td>
-	     <td align="right" ></td>
+             <td align="right" >?@</td>
+	     <td align="right" >?@</td>
         </tr> 
-       
-
-</table>
+        
+			</table>
  <BR>
         <BR>
 <table border="" cellpadding="0" cellspacing="0">
 <tr>
-<td>    禪蹿羆计<%=mm%>る<%=yy%>玡  </td> 
+<td>    禪蹿羆计??<%=mm%>る<%=yy%>?~玡  </td> 
 <td>&nbsp</td>
 <td align="right"><%=formatnumber(plncnt,0)%></td>
 </tr>
 <tr>
-<td>    穝禪蹿羆计(珹э戳计)</td> 
+<td>    穝禪蹿羆计(?]珹?螫锎良?)</td> 
 <td>&nbsp</td>
 <td align="right">+<%=formatnumber(nwlncnt,0)%></td>
 </tr>
 <tr>
-<td>    睲计碻吏禪蹿羆计 </td>
+<td>    ?w睲计碻吏禪蹿羆计 </td>
 <td align="right">-<%=formatnumber(nwclncnt,0)%></td> 
 <td>&nbsp</td>
 </tr>
 <tr>
-<td>    睲计ㄤ禪蹿羆计 </td>
+<td>    ?w睲计ㄤ?L禪蹿羆计 </td>
 <td align="right">-<%=formatnumber(oclncnt,0)%></td> 
 <td>&nbsp</td>
 </tr>
 <tr>
-<td>    睲计禪蹿羆计 </td>
+<td>    ?w睲计禪蹿?X?@羆计 </td>
 <td>&nbsp</td>
 <td align="right">-<%=formatnumber(clncnt,0)%></td> 
 </tr>
 
 <tr>
-<td>    禪蹿羆计   </td> 
+<td>    禪蹿羆计?X?@   </td> 
 <td>&nbsp</td>
 <td align="right"><%=formatnumber(actlncnt,0)%></td>
 </tr>
 <tr></tr>
 <tr></tr>
 <tr>
-<td>   羆计<%=mm%>る<%=yy%>玡 </td> 
+<td>   ?拉?羆计??<%=mm%>る<%=yy%>?~玡 </td> 
 <td>&nbsp</td>
 <td align="right"><%=formatnumber(ttlmem,0)%></td>
 </tr>
 <tr>
-<td>    癶羆计 </td> 
+<td>    ?拉?癶?懒`计 </td> 
 <td>&nbsp</td>
 <td align="right">-<%=formatnumber(cmemcnt,0)%></td>
 
 </tr>
 <tr>
-<td>    羆计 </td> 
+<td>    ?拉??h?@羆计 </td> 
 <td>&nbsp</td>
 <td align="right">-<%=formatnumber(pmemcnt,0)%></td>
 
 </tr>
 <tr>
-<td>    め羆计 </td> 
+<td>    ?拉??N?幛崃`计 </td> 
 <td>&nbsp</td>
 <td align="right">-<%=formatnumber(dmemcnt,0)%></td>
 
 </tr>
 <tr>
-<td>    瘆玻羆计 </td> 
+<td>    ?拉?瘆玻羆计 </td> 
 <td>&nbsp</td>
 <td align="right">-<%=formatnumber(bmemcnt,0)%></td>
 
 </tr>
 <tr>
-<td>    IVA羆计 </td> 
+<td>    ?拉鸌VA羆计 </td> 
 <td>&nbsp</td>
 <td align="right">-<%=formatnumber(vmemcnt,0)%></td>
 
 </tr>
 <tr>
-<td>    穝羆计</td> 
+<td>    穝?拉?羆计</td> 
 <td>&nbsp</td>
 <td align="right">+<%=formatnumber(nmemcnt,0)%></td>
 </tr>
 <tr>
 
-<td>    羆计</td> 
+<td>    ?拉?羆计?X?@</td> 
 <td>&nbsp</td>
 <td align="right"><%=formatnumber(actmem,0)%></td>
 </tr>

@@ -1,7 +1,7 @@
 <!-- #include file="../conn.asp" -->
 <!-- #include file="init.asp" -->
 <%
-on error resume next 
+on error resume next
 Function ShareCode(ByVal x)
 	select case x
           case "0A"
@@ -23,9 +23,9 @@ Function ShareCode(ByVal x)
           case "B1"
                 ShareCode="退股"
           CASE "AI"
-                ShareCode ="脫期　　" 
+                ShareCode ="脫期　　"
           CASE "D9"
-               ShareCode ="新貸銀行"  
+               ShareCode ="新貸銀行"
           CASE "B0"
                 ShareCode ="現金退股"
          case "B3"
@@ -33,20 +33,24 @@ Function ShareCode(ByVal x)
           case "C0"
                ShareCode="股息　　"
            case "CH"
-               ShareCode="暫停股息"        
+               ShareCode="暫停股息"
           case "C1"
-               ShareCode="股息銀行" 
+               ShareCode="股息銀行"
           case "C3"
-             ShareCode="股息現金" 
+             ShareCode="股息現金"
 
           case "G0","G1","G2","G3"
                 ShareCode = "入社費"
           case "H0","H1","H2","H3"
-            
-              ShareCode = "協會費" 
+
+              ShareCode = "協會費"
          case "MF"
-            
-              ShareCode = "冷戶費" 
+
+              ShareCode = "冷戶費"
+      case "A8"
+					ShareCode ="調(+)整"
+			case "B8"
+					ShareCode ="調(-)整"
 	end select
 End Function
 
@@ -67,14 +71,14 @@ Function LoanCode(ByVal x)
   		   LoanCode="股金還款"
                else
                   LoanCode="退還本息"
-               end if 
+               end if
           case "F0"
               if ms("amount") > 0 then
   		   LoanCode="股金還款"
                else
                   LoanCode="退還利息"
-               end if 
-                  
+               end if
+
           case "E6"
                     LoanCode="退款"
           case "E7"
@@ -89,23 +93,23 @@ Function LoanCode(ByVal x)
           case "ER"
 		 LoanCode="退還本金"
           case "F3"
-                 LoanCode="現金還息"  
+                 LoanCode="現金還息"
           case "FR"
 		 LoanCode="退還利息"
           CASE "DE"
-               LoanCode="銀行脫期" 
+               LoanCode="銀行脫期"
           CASE "DF"
-               LoanCode="利息脫期" 
+               LoanCode="利息脫期"
           CASE "NE"
-               LoanCode="庫房脫期"            
+               LoanCode="庫房脫期"
           CASE "D9"
- 
+
           CASE "D8"
               if ms("amount") > 0 then
                 LoanCode="貸款清數"
-              end if   
+              end if
           case "DE","NE"
-              mx = 0  
+              mx = 0
 	end select
 End Function
 
@@ -129,7 +133,7 @@ xyear = yy - 1
 for i = 1 to 12
     dvdate(i)=dateserial(xyear,6+i,1)
 
-next  
+next
 server.scripttimeout = 1800
 xname = request.form("accode")
 pos = instr(xname,"-")
@@ -137,7 +141,7 @@ pos = instr(xname,"-")
 if pos>0 then
 memno = mid(xname,1,4)
 mname =  mid(xname,pos+1,50)
- 
+
 else
   response.redirect "hyPprt.asp"
 end if
@@ -152,7 +156,7 @@ else
 	else
 		if instr(mname,"(1501-3000)") > 0 then
 			  styfield = " (a.memno>='1501' and  a.memno<='3000') and "
-		else 
+		else
 			if instr(mname,"(3001-4000)") > 0 then
 				styfield = " (a.memno>='3001' and  a.memno<='4000') and "
 			else
@@ -160,11 +164,11 @@ else
 					styfield = " (a.memno>='3001' and  a.memno<='5000') and "
 				else
 					if instr(mname,"(5001->6000)") > 0 then
-						styfield = " a.memno >'5000' and  "  
+						styfield = " a.memno >'5000' and  "
 					else
 						styfield = ""
 					end if
-				end if	
+				end if
 			end if
 		end if
 	end if
@@ -238,7 +242,7 @@ p {page-break-after: always;}
 
 
 <%
-   do while not rs.eof 
+   do while not rs.eof
 
       if  (rs("dttl") - rs("cttl")) >0 then
        xmemno = rs("memno")
@@ -248,7 +252,7 @@ p {page-break-after: always;}
 
      for i = 1 to 50
          sdate(i) = ""
-         scode(i) = "" 
+         scode(i) = ""
          samt(i)  = ""
          sbal(i)  = ""
          lnnum(i) = ""
@@ -258,22 +262,22 @@ p {page-break-after: always;}
          lnramt(i) = ""
          lniamt(i) = ""
          lnbal(i)  = ""
-        
+
          ldate(i)  = ""
-         lcode(i) = "" 
-      next  
+         lcode(i) = ""
+      next
        xlnnum=""
        ylnnum = ""
 
  set ms=conn.execute("select lnnum from loan where memno='"&xmemno&"' and ldate>='"&xxdate&"'  order by memno,ldate desc ,code ")
 if not ms.eof then
    xlnnum = ms("lnnum")
- 
+
 
 end if
 ms.close
 
-SQl = "select lnnum,ldate  from loan  where memno='"&xmemno&"' and ldate>='"&xxdate&"' and ldate<='"&yydate&"' order by lnnum,ldate,right(code,2),left(code,1)  " 
+SQl = "select lnnum,ldate  from loan  where memno='"&xmemno&"' and ldate>='"&xxdate&"' and ldate<='"&yydate&"' order by lnnum,ldate,right(code,2),left(code,1)  "
 set rs1 = Server.CreateObject("ADODB.Recordset")
 rs1.open sql, conn,1,1
 xx = 0
@@ -283,15 +287,15 @@ if not rs1.eof then
 end if
 rs1.close
 
-       
+
        xx = 1
        yy = 0
        cut = 1
        if ylnnum<>"" then
-          set ms = conn.execute("select *  from loan where  memno='"&xmemno&"'   and ldate<='"&yydate&"'   order by memno,ldate,uid,right(code,1),left(code,1) " ) 
+          set ms = conn.execute("select *  from loan where  memno='"&xmemno&"'   and ldate<='"&yydate&"'   order by memno,ldate,uid,right(code,1),left(code,1) " )
              cc = 0
              xx = 1
-             qx = 0 
+             qx = 0
              MX=0
              zero = 0
              bb = 0
@@ -301,33 +305,33 @@ rs1.close
              ssdate = right("0"&day(ms("ldate")),2)&"/"&right("0"&month(ms("ldate")),2)&"/"&year(ms("ldate"))
 
              if ms("ldate")>xxdate then
-                  
+
         	  if lnbal(xx) <> "" and  yy = 0 then
                      if lnbal(1) > 0 then
                         bal = lnbal(1)
-                          xx = xx + 1	
+                          xx = xx + 1
                      else
                         lnbal(xx) = ""
-                        bal = 0 
+                        bal = 0
                      end if
-            	  
+
                     yy = 1
-           
-        	 end if      	 
+
+        	 end if
             xdate = right("0"&day(ms("ldate")),2)&"/"&right("0"&month(ms("ldate")),2)&"/"&year(ms("ldate"))
 
                select case ms("code")
-           
+
               case "0D"
-                 
+
    	  	lnbal(xx)=ms("amount")
         	bal = ms("amount")
-                lnbal(xx)=bal 
+                lnbal(xx)=bal
          case "D9"
                set ms1=conn.execute("select appamt from loanrec where memno='"&ms("memno")&"' and lndate='"&ms("ldate")&"' ")
                if not ms1.eof then
                bal = ms1(0)
-               lnbal(xx)=bal 
+               lnbal(xx)=bal
                end if
             case  "E0","E1" , "E4" , "E2" , "E3" , "E6" ,"E7","EC"
                 lnramt(xx) =ms("amount")
@@ -336,15 +340,15 @@ rs1.close
             case  "ER"
                lnramt(xx) =ms("amount")
                bal = bal + ms("amount")
-               lnbal(xx) = bal                
+               lnbal(xx) = bal
             case  "DE"
-                lnramt(xx) =ms("amount") 
+                lnramt(xx) =ms("amount")
                 lnbal(xx) = bal
             case  "D8"
                   lnramt(xx) =ms("amount")
                   bal = 0
-                  lnbal(xx) = 0        
-           end select 
+                  lnbal(xx) = 0
+           end select
        if left(ms("code"),1) ="E" or ms("code")="0D" or ms("code")="D8"  or ms("code")="D9" OR ms("code")="DE" or ms("code")="NE" then
           lnnum(xx) = ms("lnnum")
               newln = 0
@@ -355,14 +359,14 @@ rs1.close
               xcode(xx) = ms("code")
               ldate(xx) = ms("ldate")
               lndate(xx) =right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear
-              xdate      =right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear     
-              lcode(xx) = LoanCode(ms("code"))  
-         xx = xx + 1          
+              xdate      =right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear
+              lcode(xx) = LoanCode(ms("code"))
+         xx = xx + 1
           bb = bb + 1
-       end if   
+       end if
        if (ms("code")="F3"  or ms("code")="F1" or ms("code")="F2" or ms("code")="F7" or ms("code")="F0"  or ms("code")="FR" )   then
- 
-       
+
+
            if ldate(xx-1) = ms("ldate") and xcode(xx-1) = "E"&right(ms("code"),1) then
              lniamt(xx-1) = ms("amount")
            end if
@@ -376,11 +380,11 @@ rs1.close
               xcode(xx) = ms("code")
               ldate(xx) = ms("ldate")
               lndate(xx) =right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear
-              xdate      =right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear    
+              xdate      =right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear
               lniamt(xx) = ms("amount")
               lnbal(xx) = lnbal(xx-1)
-              lcode(xx) = LoanCode(ms("code")) 
-           xx = xx + 1          
+              lcode(xx) = LoanCode(ms("code"))
+           xx = xx + 1
            bb = bb + 1
 
            end if
@@ -395,90 +399,90 @@ rs1.close
                    ms.movenext
                  end if
                loop
- 
-           end if           
-  
-  
-       end if
- 
 
-         if ms("code")="D9"  then            
+           end if
+
+
+       end if
+
+
+         if ms("code")="D9"  then
                    set ms1=conn.execute("select chequeamt,lnflag,appamt,loantype from loanrec where lnnum='"&ms("lnnum")&"'  ")
                       if  not ms1.eof then
-                          loantype = ms1("loantype")   
-                             
+                          loantype = ms1("loantype")
+
                           lnflag = ms1(1)
-                            if lnflag = "Y" then                        
-                      
-                                if ms1(0) <> 0 then  
+                            if lnflag = "Y" then
+
+                                if ms1(0) <> 0 then
                                    lniamt(xx-1) =  ms1(0)
                                 else
                                    lniamt(xx-1) =""
                                 end if
                                 if loantype ="N" then
-                        
+
                                    lcode(xx-1)  = "+ 新貸  ="
                                 else
-                     
+
                                    lcode(xx-1)=" 更改期數 "
-                                end if               
-                      
-                                lnbal(xx-1) = ms1(2)  
-                    
-                                bal = lnbal(xx-1)          
+                                end if
+
+                                lnbal(xx-1) = ms1(2)
+
+                                bal = lnbal(xx-1)
                              ELSE
                                  lnbal(xx-1) = ms1("appamt")
                                  lniamt(xx-1) =""
                                  bal = lnbal(xx-1)
-                                 lcode(xx-1) ="新貸"  
-                            END IF                     
+                                 lcode(xx-1) ="新貸"
+                            END IF
                          end if
-                         ms1.close 
-                         MX = 0     
-   
-                      end if 
+                         ms1.close
+                         MX = 0
 
-        
-    
- 
+                      end if
+
+
+
+
    if  ms("code")="DF" or ms("code")="NF"   then
        mx = 0
-       lniamt(xx-1) = ms("amount")    
+       lniamt(xx-1) = ms("amount")
        if ms("memno") ="4480"  and ms("code")="DF"  and  ymd(ms("ldate")) >="2016/07/30" and ms("lnnum")= "2013080003" then
-                      lnbal(xx-1) = bal + ms("amount") 
+                      lnbal(xx-1) = bal + ms("amount")
                       bal =    lnbal(xx-1)
-       end if   
-   end if  
+       end if
+   end if
 
- 
- 
+
+
 
   else
-       if  left(ms("code"),1)="E" or ms("code")="D8"  then        
+       if  left(ms("code"),1)="E" or ms("code")="D8"  then
                lnbal(1)=lnbal(1)-ms("amount")
-        else 
-            if trim(ms("code"))="0D" or trim(ms("code"))="D9"   then 
+        else
+            if trim(ms("code"))="0D" or trim(ms("code"))="D9"   then
                 if ms("code") = "D9" then
                   set rs1=conn.execute("select chequeamt,lnflag,appamt,loantype from loanrec where lnnum='"&ms("lnnum")&"'  ")
                       if  not rs1.eof then
-                          lnbal(1) = rs1(2)                      
+                          lnbal(1) = rs1(2)
                       end if
-                else                                                 
+                else
                      lnbal(1) = ms("amount")
                 end if
            end if
-        end if  
-           
-            lndate(xx) = chkdate  
+        end if
+
+            lndate(xx) = chkdate
             lnnum(xx) = ms("lnnum")
-            lcode(xx) = "貸款結餘" 
-            lniamt(xx)  =""     
+            lcode(xx) = "貸款結餘"
+            lniamt(xx)  =""
             aa = 1
 end if
-          
+
 
 if  not ms.eof then
-ms.movenext 
+ms.movenext
 end if
 loop
 ms.close
@@ -486,7 +490,7 @@ ms.close
 end if
 
       bb = xx
-       
+
       yy = 0
       xx = 1
       aa = 0
@@ -494,65 +498,65 @@ end if
      if not ms.eof then
        for i = 1 to 50
           sbal(i) = 0
-      next 
-      do while not ms.eof 
+      next
+      do while not ms.eof
          xyear = year(ms("ldate"))
          xmon  = month(ms("ldate"))
          xday  = day(ms("ldate"))
          xdate = xyear&xmon&xday
 
-        ssdate = right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear 
+        ssdate = right("0"&xday,2)&"/"&right("0"&xmon,2)&"/"&xyear
          if ms("ldate") > xxdate then
- 
+
  	  if sbal(xx) > 0 and  yy = 0 then
 
-  	    xx = xx + 1	
+  	    xx = xx + 1
             yy = 1
 	 end if
     select case ms("code")
         case "0A"
                 sbal(xx)=sbal(xx-1)+ms("amount")
-        case "G0" ,"H0","B0","B1","B3","BE","BF","G3","H3","MF" 
+        case "G0" ,"H0","B0","B1","B3","BE","BF","G3","H3","MF","B8"
                sbal(xx)=sbal(xx-1)-ms("amount")
         case   "AI","CH"
-                  sbal(xx) = sbal(xx-1)     
-        case  "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4" 
+                  sbal(xx) = sbal(xx-1)
+        case  "A1","A2","A3","C0","C1","C3" ,"A0","A7" ,"A4", "A8"
                 sbal(xx) = sbal(xx-1) + ms("amount")
         end select
         scode(xx) = shareCode(ms("code"))
 
         sdate(xx) = ssdate
-    if ms("amount") <> "" then  
-        if ms("code")<>"0A" then     
+    if ms("amount") <> "" then
+        if ms("code")<>"0A" then
            samt(xx) =ms("amount")
         end if
     end if
         xx = xx + 1
         aa = xx
          else
-           
-                if  left(ms("code"),1)="G" or left(ms("code"),1)="H" or left(ms("code"),1)="B" or  ms("code")="MF"  then        
+
+                if  left(ms("code"),1)="G" or left(ms("code"),1)="H" or left(ms("code"),1)="B" or  ms("code")="MF"  then
                     sbal(xx)=sbal(xx)-ms("amount")
-                else 
-                if ms("code")="0A" or left(ms("code"),1)="C" or left(ms("code"),1)="A" then 
-                    if ms("code")<>"AI"  then  
+                else
+                if ms("code")="0A" or left(ms("code"),1)="C" or left(ms("code"),1)="A" then
+                    if ms("code")<>"AI"  then
                       sbal(xx) = sbal(xx) +ms("amount")
                     end if
-                end if  
-	       
+                end if
+
                 sdate(xx) = chkdate
-                scode(xx) = "股金結餘" 
-                samt(xx)  =""     
+                scode(xx) = "股金結餘"
+                samt(xx)  =""
                 aa = 1
                end if
            end if
         ms.movenext
         loop
         end if
-        ms.close 
+        ms.close
 
 sbalamt = sbal(aa-1)
-      
+
 xx = 1
 
 if aa > bb then
@@ -563,9 +567,9 @@ end if
 if sbal(1) = ""  then
    sbal(1) =""
    scode(1)=""
-   
+
 end if
-if sbalamt > 0 then 
+if sbalamt > 0 then
 %>
 <p>
 <center>
@@ -583,72 +587,72 @@ if sbalamt > 0 then
           <td width="660" align="left">　　</td>
      </tr>
      <tr>
-          <td width="400" align="left">　　 <%=memname%></font></td> 
-          <td width="660" align="left"><font size="3"  face="標楷體" >　　　（聯絡員）<%=xmemcname%>（電話）<%=xmemContactTel%></font></td> 
+          <td width="400" align="left">　　 <%=memname%></font></td>
+          <td width="660" align="left"><font size="3"  face="標楷體" >　　　（聯絡員）<%=xmemcname%>（電話）<%=xmemContactTel%></font></td>
      </tr>
-     
+
 </table>
 
 <br>
 <br>
 <table border="0" cellspacing="1" cellpadding="1" align="center" >
 	<tr >
-		
-		<td width=100 align="center"><font size="2"  face="標楷體" >日期</font></td> 
-               
-		<td width=80 align="center"><font size="2"  face="標楷體" >股金</font></td> 
-               
-		<td width=100 align="center"><font size="2"  face="標楷體" >結餘</font></td> 
-                            
-		<td width=100 align="center"><font size="2"  face="標楷體" >類別</font></td> 
-               
-                <td  width=1 align="center"> </td>	
-		<td width=100 align="center"><font size="2"  face="標楷體" >日期</font></td> 
-               
 
-                
-		<td width=100 align="center"><font size="2"  face="標楷體" >利息</font></td> 
-               
-		<td width=100 align="center"><font size="2"  face="標楷體" >每月還款</font></td> 
-                
-		<td width=100 align="center"><font size="2"  face="標楷體" >新貸總額/<br>結餘</font></td> 
-              
-		<td width=100 align="center"><font size="2"  face="標楷體" >類別</font></td>            
+		<td width=100 align="center"><font size="2"  face="標楷體" >日期</font></td>
+
+		<td width=80 align="center"><font size="2"  face="標楷體" >股金</font></td>
+
+		<td width=100 align="center"><font size="2"  face="標楷體" >結餘</font></td>
+
+		<td width=100 align="center"><font size="2"  face="標楷體" >類別</font></td>
+
+                <td  width=1 align="center"> </td>
+		<td width=100 align="center"><font size="2"  face="標楷體" >日期</font></td>
+
+
+
+		<td width=100 align="center"><font size="2"  face="標楷體" >利息</font></td>
+
+		<td width=100 align="center"><font size="2"  face="標楷體" >每月還款</font></td>
+
+		<td width=100 align="center"><font size="2"  face="標楷體" >新貸總額/<br>結餘</font></td>
+
+		<td width=100 align="center"><font size="2"  face="標楷體" >類別</font></td>
 	</tr>
-	
+
 	<tr><td colspan=11><hr></td></tr>
 <%
        xx = 1
        do while xx < smax
 
-%>  
+%>
         <tr>
 		<td width=100 align="center"><%=sdate(xx)%></td>
-<%if samt(xx)<>"" then%>               
+<%if samt(xx)<>"" then%>
 		<td width=80 align="right"><%=formatnumber(samt(xx),2)%></td>
 <%else%>
                 <td width=80 align="right"></td>
 <%end if%>
 <%if sbal(xx)<>"" then
-  if sbal(xx)>0 then %> 
-                
+  if sbal(xx)>0 then %>
+
 
 		<td  align="right"><%=formatnumber(sbal(xx),2)%></td>
 <%else%>
                 <td  align="right">&nbsp;</td>
 <%end if%>
-<%end if%>                            
-		<td  align="center"><font size="2"  face="標楷體" ><%=scode(xx)%></font></td>    
-               <td  width=1 align="center"> </td>	
+<%end if%>
+		<td  align="center"><font size="2"  face="標楷體" ><%=scode(xx)%></font></td>
+               <td  width=1 align="center"> </td>
 
-<%if lnnum(xx) <>""<>"" then  %>              
+<%if lnnum(xx) <>""<>"" then  %>
 		<td width=100 align="center"><%=lndate(xx)%></td>
-<%if lniamt(xx)<>"" then%>                
+<%if lniamt(xx)<>"" then%>
 		<td  align="right"><%=formatnumber(lniamt(xx),2)%></td>
 <%else%>
                <td></td>
 <%end if%>
-                <%if lnramt(xx) <> ""   then %>           
+                <%if lnramt(xx) <> ""   then %>
  		    <td  align="right"><%=formatNumber(lnramt(xx),2)%></td>
 <%
                 else
@@ -656,68 +660,68 @@ if sbalamt > 0 then
                 '   if loantype = "E" then
                 '      lcode(xx)=" 更改期數 "
                 '   end if
-%>                      
+%>
                    <td ><%=lcode(xx)%></td>
-<% 
+<%
 
 
                    lcode(xx)=""
                    else
 %>
                    <td></td>
-                
+
 <%                end if
                   end if
-            
-%>                                 
-               	
-<%if lnbal(xx)<>""   then%>                 
+
+%>
+
+<%if lnbal(xx)<>""   then%>
 
 		<td  align="right"><%=formatnumber(lnbal(xx),2)%></td>
 
 <%else%>
                 <td>&nbsp;</td>
 <%end if%>
-              
-		<td  align="center"><font size="2"  face="標楷體" ><%=lcode(xx)%></font></td>         
-        </tr>   
-  
+
+		<td  align="center"><font size="2"  face="標楷體" ><%=lcode(xx)%></font></td>
+        </tr>
+
 <%
             end if
         xx = xx + 1
         line = line + 1
         loop
       if smax< 21 then
-         uu = 21 - smax 
+         uu = 21 - smax
          for i = 1 to uu
-            
+
 %>
           <tr><td colspan=11>&nbsp;</td></tr>
 <%
       line = line + 1
       next
-      end if   
+      end if
 
 %>
   </table>
 
-<%      
+<%
 
 
 if xlnnum<>"" then
-%>        
+%>
 
 <table border="0" cellspacing="1" cellpadding="1" align="center" >
 
    <tr>
          <td width="300" >借據編號</td>
          <%if xlnnum<>"" then %>
-         <td width="300" ><%=xlnnum%></td> 
+         <td width="300" ><%=xlnnum%></td>
          <%else%>
          <td width="300" >&nbsp;</td>
          <%end if%>
          <td width="300" >&nbsp;</td>
-    </tr> 
+    </tr>
     </table>
 <%
 
@@ -739,15 +743,15 @@ Set es = server.createobject("ADODB.Recordset")
    sqlstr = " select * from guarantor where lnnum = '"&xlnnum&"' "
    es.open sqlstr, conn, 1, 1
    xx = 1
-   do while  not es.eof 
+   do while  not es.eof
       select case xx
-             case 1 
-                  guid1 = es("guarantorID")                
+             case 1
+                  guid1 = es("guarantorID")
                   guname1 = es("guarantorName")
                   if guid1 <> "" then
                   bal = 0
                   Set rs1 = server.createobject("ADODB.Recordset")
-		  sql1 = " select * from share where memno = "& guid1                  
+		  sql1 = " select * from share where memno = "& guid1
                   rs1.open sql1, conn, 2, 2
                   do while not rs1.eof
                      select case left(rs1("code"),1)
@@ -758,19 +762,19 @@ Set es = server.createobject("ADODB.Recordset")
                                     bal = bal+ rs1("amount")
                                  end if
                      end select
-                             
+
                   rs1.movenext
                   loop
                   rs1.close
                   gusave1 = bal
                   end if
              case 2
-	 guid2 = es("guarantorID")               
+	 guid2 = es("guarantorID")
                  guname2 = es("guarantorName")
                   if guid2 <> "" then
                   bal = 0
-                  
-	  sql1 = " select * from share where memno = "& guid2                  
+
+	  sql1 = " select * from share where memno = "& guid2
                   rs1.open sql1, conn, 2, 2
                   do while not rs1.eof
                      select case left(rs1("code"),1)
@@ -781,19 +785,19 @@ Set es = server.createobject("ADODB.Recordset")
                                     bal = bal+ rs1("amount")
                                  end if
                      end select
-                             
+
                   rs1.movenext
                   loop
                   rs1.close
                   gusave2 = bal
                   end if
              case 3
-	 guid3 = es("guarantorID")            
+	 guid3 = es("guarantorID")
                  guname3 = es("guarantorName")
                   if guid3 <> "" then
                   bal = 0
-                 
-	  sql1 = " select * from share where memno = "& guid3                  
+
+	  sql1 = " select * from share where memno = "& guid3
                   rs1.open sql1, conn, 2, 2
                   do while not rs1.eof
                      select case left(rs1("code"),1)
@@ -804,16 +808,16 @@ Set es = server.createobject("ADODB.Recordset")
                                     bal = bal+ rs1("amount")
                                  end if
                      end select
-                             
+
                   rs1.movenext
                   loop
                   rs1.close
                   gusave3 = bal
                   end if
-         end select 
-        
-      xx = xx + 1 
-   es.movenext   
+         end select
+
+      xx = xx + 1
+   es.movenext
    loop
    es.close
 
@@ -821,81 +825,81 @@ xx = 1
 Set ms = server.createobject("ADODB.Recordset")
 sql1 = "select * from guarantor  where  guarantorID ='"&xlnnum&"' "
 ms.open sql1, conn, 1, 1
-do while  not ms.eof 
+do while  not ms.eof
      select case xx
-             case 1 
-                  guoid1 = rs("memno")                              
+             case 1
+                  guoid1 = rs("memno")
                   if guoid1 <> "" then
                   guln1=""
                   Set rs1 = server.createobject("ADODB.Recordset")
-		  sql1 = " select * from loanrec where repaystat='N' and memno = "& guoid1                  
+		  sql1 = " select * from loanrec where repaystat='N' and memno = "& guoid1
                   rs1.open sql1, conn, 2, 2
                   if  not rs1.eof then
                       guln1 = rs1("lnnum")
-                  end if 
-                             
-                  
+                  end if
+
+
                   rs1.close
                   Set rs1 = server.createobject("ADODB.Recordset")
-		  sql1 = " select memname,memcname from memmaster where memno = "& guoid1                  
+		  sql1 = " select memname,memcname from memmaster where memno = "& guoid1
                   rs1.open sql1, conn, 2, 2
                   if  not rs1.eof then
                       guoname1 = rs1("memname")&" "&rs1("memcname")
-                  end if 
-                             
-                  
-                  rs1.close                
+                  end if
+
+
+                  rs1.close
                  end  if
              case 2
-	 guid2 = rs("guarantorID")               
+	 guid2 = rs("guarantorID")
                  guname2 = rs("guarantorName")
                  if guoid2 <> "" then
                   guln2=""
                   Set rs1 = server.createobject("ADODB.Recordset")
-		  sql1 = " select * from loanrec where repaystat='N' and memno = "& guoid2                  
+		  sql1 = " select * from loanrec where repaystat='N' and memno = "& guoid2
                   rs1.open sql1, conn, 2, 2
                   if  not rs1.eof then
                       guln2 = rs1("lnnum")&" "&rs1("memcname")
-                  end if 
-                  
+                  end if
+
                   rs1.close
-                
+
                   Set rs1 = server.createobject("ADODB.Recordset")
-		  sql1 = " select memname,memcname from memmaster where memno = "& guoid2                  
+		  sql1 = " select memname,memcname from memmaster where memno = "& guoid2
                   rs1.open sql1, conn, 2, 2
                   if  not rs1.eof then
                       guoname2 = rs1("memname")&" "&rs1("memcname")
-                  end if 
-                             
-                  
-                  rs1.close  
+                  end if
+
+
+                  rs1.close
                 end if
              case 3
-		 guid3 = rs("guarantorID")            
+		 guid3 = rs("guarantorID")
                  guname3 = rs("guarantorName")
                  if guoid3 <> "" then
                   guln3=""
                   Set rs1 = server.createobject("ADODB.Recordset")
-		  sql1 = " select * from loanrec where repaystat='N' and memno = "& guoid3                  
+		  sql1 = " select * from loanrec where repaystat='N' and memno = "& guoid3
                   rs1.open sql1, conn, 2, 2
                   if  not rs1.eof then
-                    
+
                           guln3 = rs1("lnnum")
-                  end if 
-                             
-                  
+                  end if
+
+
                   rs1.close
                   Set rs1 = server.createobject("ADODB.Recordset")
-		  sql1 = " select memname,memcname from memmaster where memno = "& guoid13                 
+		  sql1 = " select memname,memcname from memmaster where memno = "& guoid13
                   rs1.open sql1, conn, 2, 2
                   if  not rs1.eof then
                       guoname3 = rs1("memname")+" "+rs1("memcname")
-                  end if 
-                             
-                  
-                  rs1.close                   
                   end if
-         end select 
+
+
+                  rs1.close
+                  end if
+         end select
 
 ms.movenext
 loop
@@ -905,16 +909,16 @@ set rs1=nothing
 %>
 
         <table border="0" cellpadding="0" cellspacing="0">
-<%if guid1 <>"" then 
-   
+<%if guid1 <>"" then
+
 %>
         <tr>
              <td width="50">&nbsp;</td>
              <td width="100">1.擔保人<td>
              <td width="50"><%=guid1%></td>
              <td width="200"><%=guname1%></td>
-             
-      
+
+
         </tr>
 <%else%>
         <tr>
@@ -922,20 +926,20 @@ set rs1=nothing
              <td width="100">1.擔保人<td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
 <%end if%>
-<%if guid2 <>"" then 
-    
+<%if guid2 <>"" then
+
 %>
         <tr>
              <td width="50">&nbsp;</td>
              <td width="100">2.擔保人 <td>
              <td width="50"><%=guid2%></td>
              <td width="200"><%=guname2%></td>
- 
-      
+
+
         </tr>
 <%else%>
         <tr>
@@ -943,21 +947,21 @@ set rs1=nothing
              <td width="100">2.擔保人<td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
 <%end if%>
 <%if guid3 <>"" then
-    
+
 %>
         <tr>
-          
+
               <td width="50">&nbsp;</td>
              <td width="100">3.擔保人 <td>
              <td width="50"><%=guid3%></td>
              <td width="200"><%=guname3%></td>
- 
-      
+
+
         </tr>
 <%else%>
         <tr>
@@ -965,20 +969,20 @@ set rs1=nothing
              <td width="100">3.擔保人<td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
 <%end if%>
 <%if guoid1 <>"" then
-     
+
 %>
         <tr>
               <td width="50">&nbsp;</td>
              <td width="100">1.擔保其他人 <td>
              <td width="50"><%=guoid1%></td>
              <td width="300"><%=guoname1%></td>
-  
-      
+
+
         </tr>
 <%else%>
         <tr>
@@ -986,12 +990,12 @@ set rs1=nothing
              <td width="100">1.擔保其他人<td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
 <%end if%>
 <%if guoid2 <>"" then
-     
+
 %>
         <tr>
               <td width="50">&nbsp;</td>
@@ -999,7 +1003,7 @@ set rs1=nothing
              <td width="50"><%=guoid2%></td>
              <td width="200"><%=guoname2%></td>
 
-      
+
         </tr>
 <%else%>
         <tr>
@@ -1007,19 +1011,19 @@ set rs1=nothing
              <td width="100">2.擔保其他人<td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
 <%end if%>
-<%if guoid3 <>"" then 
-    
+<%if guoid3 <>"" then
+
 %>
         <tr>
              <td width="50">&nbsp;</td>
              <td width="100">3.擔保其他人 <td>
              <td width="50"><%=guoid3%></td>
              <td width="200"><%=guoname3%></td>
- 
+
         </tr>
 <%else%>
         <tr>
@@ -1027,14 +1031,14 @@ set rs1=nothing
              <td width="100">3.擔保其他人<td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
 <%end if%>
 </table>
-     
-<% 
-line = line + 6 
+
+<%
+line = line + 6
 else
 %>
 <table border="0" cellspacing="1" cellpadding="1" align="center" >
@@ -1042,11 +1046,11 @@ else
 
    <tr>
          <td width="300" >借據編號</td>
- 
+
          <td width="300" >&nbsp;</td>
- 
+
          <td width="300" >&nbsp;</td>
-    </tr> 
+    </tr>
     </table>
     <table border="0" cellpadding="0" cellspacing="0">
         <tr>
@@ -1055,52 +1059,52 @@ else
              <td width="50">*****</td>
              <td width="200">*****</td>
 
-      
+
         </tr>
         <tr>
-              <td width="50">&nbsp;</td> 
+              <td width="50">&nbsp;</td>
              <td width="100"><b>2.擔保人</b><td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
+
         </tr>
         <tr>
              <td width="50">&nbsp;</td>
              <td width="100"><b>3.擔保人</b><td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
         <tr>
-              <td width="50">&nbsp;</td>  
+              <td width="50">&nbsp;</td>
              <td width="100"><b>1.擔保其他人</b><td>
              <td width="50">*****</td>
              <td width="200">*****</td>
 
-      
+
         </tr>
         <tr>
               <td width="50">&nbsp;</td>
              <td width="100"><b>2.擔保其他人</b><td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
-      
+
+
         </tr>
         <tr>
              <td width="50">&nbsp;</td>
              <td width="100"><b>3.擔保其他人</b><td>
              <td width="50">*****</td>
              <td width="200">*****</td>
- 
+
         </tr>
 
   </table>
 <%
 line = line + 7
 end if
-      
+
 %>
 <br>
 <font face="arial, helvetica, sans-serif" size="2" ><b>　　　　</b></font><br>

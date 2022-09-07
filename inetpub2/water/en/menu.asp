@@ -222,24 +222,25 @@ function helppopup(){
 		<% if MenuRs("Reporting2") Then %><tr><td colspan='2'><A href='delinquentReport.asp'>呆帳報告</A></td></tr><% End If %>
 		<% if MenuRs("Reporting3") Then %><tr><td colspan='2'><A href='dormantList.asp'>冷戶報告</A></td></tr><% End If %>
 		<% if MenuRs("Reporting4") Then %><tr><td colspan='2'><A href='ivalst.asp'>IVA報告</A></td></tr><% End If %>
-                <% if MenuRs("Reporting5") Then %><tr><td colspan='2'><A href='carshlst.asp'>破產報告</A></td></tr> <% End If %> 
+		<% if MenuRs("Reporting5") Then %><tr><td colspan='2'><A href='carshlst.asp'>破產報告</A></td></tr> <% End If %> 
 		<% if MenuRs("Reporting6") Then %><tr><td colspan='2'><A href='sectionList.asp'>社員分組/組員列表</A></td></tr><% End If %>
 		<% if MenuRs("Reporting7") Then %><tr><td colspan='2'><A href='MemDlst.asp'>社員轉帳資料列表</A></td></tr><% End If %>
 		<% if MenuRs("Reporting8") Then %><tr><td colspan='2'><A href='birthdayListPrint.asp'>社員生日名單</A></td></tr><% End If %>
-                <% if MenuRs("Reporting9") Then %><tr><td colspan='2'><A href='retirelst.asp'>退休社員報告</A></td></tr><% End If %>  
-                <% if MenuRs("Reporting10") Then %><tr><td colspan='2'><A href='memstlst.asp'>社員狀況列印</A></td></tr><% End If %>
+		<% if MenuRs("Reporting9") Then %><tr><td colspan='2'><A href='retirelst.asp'>退休社員報告</A></td></tr><% End If %>  
+		<% if MenuRs("Reporting10") Then %><tr><td colspan='2'><A href='memstlst.asp'>社員狀況列印</A></td></tr><% End If %>
 		<% if MenuRs("Reporting11") Then %>
-		<tr><td colspan='2'><HR STYLE=' color: #CCCCCC' SIZE=1 width='100%'></td></tr>
-		<tr><td colspan='2'><A href='monCtlst.asp'>現金帳列表</A></td></tr>
+			<tr><td colspan='2'><HR STYLE=' color: #CCCCCC' SIZE=1 width='100%'></td></tr>
+			<tr><td colspan='2'><A href='monCtlst.asp'>現金帳列表</A></td></tr>
 		<% End If %>
 		<% if MenuRs("Reporting12") Then %><tr><td colspan='2'><A href='monTtlst.asp'>庫房帳列表</A></td></tr><% End If %>
 		<% if MenuRs("Reporting13") Then %><tr><td colspan='2'><A href='monBtlst.asp'>銀行帳列表</A></td></tr><% End If %>
 		<% if MenuRs("Reporting14") Then %><tr><td colspan='2'><A href='monOtlst.asp'>其他帳列</A></td></tr><% End If %>
 		<% if MenuRs("Reporting15") Then %><tr><td colspan='2'><A href='balList.asp'>每月帳統計列表</A></td></tr><% End If %>
-                <% if MenuRs("Reporting16") Then %><tr><td colspan='2'><A href='Hyprt.asp'>半年結(Epson 890)</A></td></tr><% End If %>
-                <% if MenuRs("Reporting17") Then %><tr><td colspan='2'><A href='HyPprt.asp'>半年結(PDF)</A></td></tr><% End If %>
-                <% if MenuRs("Reporting18") Then %><tr><td colspan='2'><A href='Fyprt.asp'>全年結(Epson 890)</A></td></tr><% End If %>
-                <% if MenuRs("Reporting19") Then %><tr><td colspan='2'><A href='FyPprt.asp'>全年結(PDF)</A></td></tr><% End If %>
+		<% if MenuRs("Reporting16") Then %><tr><td colspan='2'><A href='Hyprt.asp'>半年結(Epson 890)</A></td></tr><% End If %>
+		<% if MenuRs("Reporting17") Then %><tr><td colspan='2'><A href='HyPprt.asp'>半年結(PDF)</A></td></tr><% End If %>
+		<% if MenuRs("Reporting18") Then %><tr><td colspan='2'><A href='Fyprt.asp'>全年結(Epson 890)</A></td></tr><% End If %>
+		<% if MenuRs("Reporting19") Then %><tr><td colspan='2'><A href='FyPprt.asp'>全年結(PDF)</A></td></tr><% End If %>
+		<% if MenuRs("Reporting19") Then %><tr><td colspan='2'><A href='shfypprt.asp'>股息全年結(PDF)</A></td></tr><% End If %>
 	</table>
 </DIV>
 

@@ -44,7 +44,15 @@ do while  NOT rs.eof
 	pd2 = rs("bnk")
 	pd4 = left(rs("bch") & rs("bacct") & space(34), 34)
 	pd5 = right("00000000000000000" & rs("dividend") * 100, 17)
-	pd6 = left("NO" & right(space(5) & rs("memno"), 5) & space(34), 35)
+	mno = rs("memno")
+	pd6 = space(35)
+	if mno = 828 then
+		pd6 = left("NO" & space(1) & rs("memno") & space(34), 35)
+	elseif mno = 1407 or mno = 2268 or mno = 2409 or mno = 2453 or mno = 2580 or mno = 3568 or mno = 3895 or mno = 4264 or mno = 4318 or mno = 4352 or mno = 4378 or mno = 4660 or mno = 4666 or mno = 4858 or mno = 4865 or mno = 4869 or mno = 4873 or mno = 4901 or mno = 5011 or mno = 5045 or mno = 5075 then
+		pd6 = left("NO" & rs("memno") & space(34), 35)
+	else
+		pd6 = left("NO" & right(space(5) & rs("memno"), 5) & space(34), 35)
+	end if
 	pd8 = left(UCase(rs("memname")) & space(140), 140)
 	detail = detail & pd1 & pd2 & pd3 & pd4 & pd5 & pd6 & pd7 & pd8 & pd9 & vbCrLf
 	rs.movenext
