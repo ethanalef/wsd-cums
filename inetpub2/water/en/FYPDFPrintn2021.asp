@@ -140,7 +140,7 @@ if memno<>"9999"  then
 else
 	styfield = "accode='9999' and "
 if instr(mname,"(1-500)") > 0 then
-	styfield = styfield & "(a.memno>='1' and a.memno<='500') "
+	styfield = styfield & "(a.memno>='1' and a.memno<='500') and "
 else
 if instr(mname,"(501-1000)") > 0 then
 	  styfield = styfield & " (a.memno>='501' and  a.memno<='1000') and "

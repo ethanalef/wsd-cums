@@ -35,7 +35,7 @@ function CA(){
  		    <td>
 		    <select name="accode">
                     <option>
-					<option<% if accode="9900" then %> selected<% end if%>>9999 - 工作人員(1  -500)
+					<option<% if accode="9900" then %> selected<% end if%>>9999 - 工作人員(1-500)
                     <option<% if accode="9911" then %> selected<% end if%>>9999 - 工作人員(501-1000)
                     <option<% if accode="9922" then %> selected<% end if%>>9999 - 工作人員(1001-1500)
                     <option<% if accode="9933" then %> selected<% end if%>>9999 - 工作人員(1501-2000)
