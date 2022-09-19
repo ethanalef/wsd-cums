@@ -30,7 +30,7 @@ ph9 = right("00000000000000000" & ph9, 17)
 ph10 = space(1)
 ph11 = space(311)
 
-header = ph1 & ph2 & ph3 & ph4 & ph5 & ph6 & ph7 & ph8 & ph9 & ph10 & ph11 & vbCrLf
+header = ph1 & ph2 & ph3 & ph4 & ph5 & ph6 & ph7 & ph8 & ph9 & ph10 & ph11
 
 detail = ""
 pd1 = "PD"
@@ -54,7 +54,7 @@ do while  NOT rs.eof
 		pd6 = left("NO" & right(space(5) & rs("memno"), 5) & space(34), 35)
 	end if
 	pd8 = left(UCase(rs("memname")) & space(140), 140)
-	detail = detail & pd1 & pd2 & pd3 & pd4 & pd5 & pd6 & pd7 & pd8 & pd9 & vbCrLf
+	detail = detail & vbCrLf & pd1 & pd2 & pd3 & pd4 & pd5 & pd6 & pd7 & pd8 & pd9
 	rs.movenext
 loop
 set rs = nothing
